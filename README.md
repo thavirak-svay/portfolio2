@@ -1,36 +1,84 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DevBackend Portfolio
+
+A professional backend developer portfolio website built with Next.js, TypeScript, and Tailwind CSS. This portfolio showcases backend development skills, projects, and experience with a modern, responsive UI.
+
+![DevBackend Portfolio](public/projects/portfolio-screenshot.jpg)
+
+## Features
+
+- 🌓 Dark/Light mode with system preference detection
+- 🎨 Modern, clean UI built with TailwindCSS
+- 🎭 Smooth animations and transitions using Framer Motion
+- 📱 Fully responsive design for all devices
+- ⚡ Built with Next.js for optimal performance
+- 🔠 Typing animations with react-type-animation
+- 🔍 Filterable project showcase
+- 📊 Animated skill progress bars
+- 📝 Contact form with validation
+- 🧩 Component-based architecture
+
+## Sections
+
+- **Hero** - Engaging introduction with typing animation
+- **About** - Professional background and expertise
+- **Skills** - Visual representation of technical skills
+- **Projects** - Filterable gallery of backend projects
+- **Experience** - Timeline of professional experience
+- **Contact** - Contact form and direct contact options
+- **Footer** - Site navigation and additional links
+
+## Tech Stack
+
+- **Framework**: Next.js with App Router
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Animation**: Framer Motion
+- **Icons**: Heroicons
+- **Deployment**: Vercel (recommended)
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+   ```bash
+   git clone https://github.com/yourusername/devbackend-portfolio.git
+   cd devbackend-portfolio
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+   ```bash
+   npm install
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Run the development server:
 
-## Learn More
+   ```bash
+   npm run dev
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Customization
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Personal Information**: Update text in components under `src/components/sections/`
+2. **Projects**: Modify the `projects` array in `src/components/sections/Projects.tsx`
+3. **Skills**: Update the `skillsData` array in `src/components/sections/Skills.tsx`
+4. **Experience**: Modify the `experienceData` array in `src/components/sections/Experience.tsx`
+5. **Colors & Theme**: Customize colors in `src/app/globals.css`
+6. **Images**: Replace images in the `public/projects/` directory
 
-## Deploy on Vercel
+## Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The easiest way to deploy your portfolio is to use [Vercel](https://vercel.com/new?utm_medium=default-template&filter=next.js), the platform from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Credits
+
+- Icons from [Heroicons](https://heroicons.com/)
+- Animations by [Framer Motion](https://www.framer.com/motion/)
+- Typing animation by [React Type Animation](https://github.com/maxeth/react-type-animation)
+- Image placeholders from [Unsplash](https://unsplash.com/)

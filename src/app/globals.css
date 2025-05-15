@@ -3,24 +3,226 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --primary: #3b82f6;
+  --secondary: #10b981;
+  --accent: #8b5cf6;
+  --border: #e5e7eb;
 }
 
-@theme inline {
+/* Theme Variables */
+:root {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Dark mode variables - Using class selector instead of media query */
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --primary: #4f8df9;
+  --secondary: #15d997;
+  --accent: #9d70fb;
+  --border: #2d2d2d;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* Improved text gradient */
+.text-gradient {
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  background-size: 200% auto;
+  background-position: 0% center;
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.3));
+  animation: gradient-shift 8s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Custom animations */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* More prominent shine effect */
+.shine-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.shine-effect::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: shine 3s ease-in-out infinite;
+}
+
+/* Fix for navbar visibility on mobile */
+.mobile-menu-open {
+  overflow: hidden;
+}
+
+.fixed-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.nav-shadow {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Mobile menu specific adjustments */
+@media (max-width: 767px) {
+  .mobile-nav-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  /* Prevent body scroll when menu is open */
+  body.mobile-menu-open {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Better tap target size for mobile */
+  .mobile-nav-link {
+    min-height: 44px;
+    touch-action: manipulation;
+  }
+
+  /* Smooth scaling transitions */
+  .fixed-navbar a {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+
+  /* Improve performance with hardware acceleration */
+  .fixed-navbar * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Add gentle easing for all transitions */
+  .fixed-navbar button,
+  .fixed-navbar a {
+    transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+      background-color 0.2s cubic-bezier(0.22, 1, 0.36, 1), color 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+.fixed-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.nav-shadow {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Extra styles for better mobile experience */
+@media (max-width: 767px) {
+  .mobile-nav-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  .mobile-menu-open {
+    overflow: hidden;
+  }
+}
+
+/* Fix z-index stacking context issues */
+.z-highest {
+  z-index: 9999;
+}
+.z-high {
+  z-index: 9000;
+}
+.z-medium {
+  z-index: 5000;
 }
