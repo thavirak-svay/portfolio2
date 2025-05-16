@@ -5,7 +5,7 @@ import { motion } from "framer-motion"
 import { TypeAnimation } from "react-type-animation"
 import { ArrowDownIcon, CommandLineIcon, CodeBracketIcon, ServerIcon } from "@heroicons/react/24/outline"
 import ClientOnly from "../ui/ClientOnly"
-import AnimatedGradientBackground from "../ui/animated-gradient-background"
+import Background from "../ui/Background"
 
 // 3D Code Block Component
 const CodeBlock3D = () => {
@@ -121,7 +121,7 @@ const ModernHero = () => {
     >
       {/* Background effects */}
       <ClientOnly showTransition={true}>
-        <AnimatedGradientBackground
+        <Background
           Breathing={true}
           startingGap={140}
           breathingRange={10}
@@ -158,7 +158,7 @@ const ModernHero = () => {
             <div className="relative flex-shrink-0">
               {/* Outermost glow */}
               <motion.span
-                className="absolute -inset-2 rounded-full bg-green-400/20"
+                className="absolute rounded-full bg-green-400/20"
                 animate={{
                   opacity: [0.2, 0.4, 0.2],
                   scale: [1, 1.6, 1],
@@ -211,7 +211,7 @@ const ModernHero = () => {
                   display: "inline-block",
                   minWidth: "320px",
                   minHeight: "1.2em",
-                  textShadow: "0 0 5px rgba(255, 255, 255, 0.3)",
+                  textShadow: "0 0 0",
                 }}
                 className="brightness-150 font-bold"
               />

@@ -3,7 +3,7 @@
 import React from "react"
 import { motion } from "framer-motion"
 import { CodeBracketIcon, ServerIcon } from "@heroicons/react/24/outline"
-import AnimatedGradientBackground from "../ui/animated-gradient-background"
+import Background from "../ui/Background"
 import ClientOnly from "../ui/ClientOnly"
 
 // Feature Card similar to what's used in other components
@@ -30,7 +30,7 @@ const ModernGradientSection = () => {
       className="relative min-h-screen w-full flex flex-col justify-center py-20 overflow-hidden"
     >
       <ClientOnly showTransition={true}>
-        <AnimatedGradientBackground
+        <Background
           Breathing={true}
           startingGap={120}
           breathingRange={15}
@@ -115,7 +115,7 @@ const ModernGradientSection = () => {
                 <span className="ml-2 text-xs text-white/70 font-mono">animated-gradient.tsx</span>
               </div>
               <pre className="text-sm text-gray-300 font-mono overflow-x-auto p-4 bg-black/50 rounded-lg">
-                <code>{`<AnimatedGradientBackground
+                <code>{`<Background
   Breathing={true}
   startingGap={120}
   breathingRange={15}

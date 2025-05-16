@@ -1,13 +1,13 @@
 "use client"
 
-import AnimatedGradientBackground from "@/components/ui/animated-gradient-background"
+import Background from "@/components/ui/Background"
 import { motion } from "framer-motion"
 
 const DemoVariant1 = () => {
   return (
     <div className="relative w-full h-screen overflow-hidden">
       {/* Gradient Background */}
-      <AnimatedGradientBackground Breathing={true}>
+      <Background Breathing={true}>
         <div className="relative z-10 flex flex-col items-center justify-start h-full px-4 pt-32 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -34,7 +34,7 @@ const DemoVariant1 = () => {
             A customizable animated radial gradient background with a subtle breathing effect.
           </p>
         </div>
-      </AnimatedGradientBackground>
+      </Background>
     </div>
   )
 }

@@ -3,7 +3,7 @@
 import { motion } from "framer-motion"
 import React, { useEffect, useRef } from "react"
 
-interface AnimatedGradientBackgroundProps {
+interface BackgroundProps {
   /**
    * Initial size of the radial gradient, defining the starting width.
    * @default 110
@@ -74,10 +74,10 @@ interface AnimatedGradientBackgroundProps {
  * This component renders a customizable animated radial gradient background with a subtle breathing effect.
  * It uses `framer-motion` for an entrance animation and raw CSS gradients for the dynamic background.
  *
- * @param {AnimatedGradientBackgroundProps} props - Props for configuring the gradient animation.
+ * @param {BackgroundProps} props - Props for configuring the gradient animation.
  * @returns JSX.Element
  */
-const AnimatedGradientBackground: React.FC<AnimatedGradientBackgroundProps> = ({
+const Background: React.FC<BackgroundProps> = ({
   startingGap = 125,
   Breathing = false,
   gradientColors = ["#0A0A0A", "#2979FF", "#FF80AB", "#FF6D00", "#FFD600", "#00E676", "#3D5AFE"],
@@ -151,4 +151,4 @@ const AnimatedGradientBackground: React.FC<AnimatedGradientBackgroundProps> = ({
   )
 }
 
-export default AnimatedGradientBackground
+export default Background
