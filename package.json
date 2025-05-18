@@ -10,14 +10,16 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
+    "@react-three/fiber": "^9.1.2",
     "clsx": "^2.1.1",
-    "framer-motion": "^12.11.3",
+    "framer-motion": "^12.11.4",
     "lucide-react": "^0.510.0",
     "next": "15.3.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-type-animation": "^3.2.0",
-    "tailwind-merge": "^3.3.0"
+    "tailwind-merge": "^3.3.0",
+    "three": "^0.176.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -25,6 +27,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/three": "^0.176.0",
     "eslint": "^9",
     "eslint-config-next": "15.3.2",
     "tailwindcss": "^4",

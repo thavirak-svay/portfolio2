@@ -1,59 +1,76 @@
 "use client"
 
 import React, { useRef, useState } from "react"
-import { motion, useScroll, useTransform } from "framer-motion"
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
 import { DocumentTextIcon, RocketLaunchIcon, UserGroupIcon } from "@heroicons/react/24/outline"
 import Image from "next/image"
 import ClientOnly from "../ui/ClientOnly"
+import { CanvasRevealEffect } from "../ui/canvas-reveal-effect"
 
-// Modern 3D card component with tilt effect
-const Card3D = ({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) => {
-  const [rotation, setRotation] = useState({ x: 0, y: 0 })
+// Modern 3D card component with Canvas Reveal Effect
+type ColorScheme = "default" | "blue" | "pink"
+
+const Card3D = ({
+  icon,
+  title,
+  description,
+  colorScheme = "default",
+}: {
+  icon: React.ReactNode
+  title: string
+  description: string
+  colorScheme?: ColorScheme
+}) => {
   const [isHovered, setIsHovered] = useState(false)
 
-  // Handle mouse move for 3D tilt effect
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const card = e.currentTarget
-    const rect = card.getBoundingClientRect()
-    const centerX = rect.left + rect.width / 2
-    const centerY = rect.top + rect.height / 2
-    const posX = e.clientX - centerX
-    const posY = e.clientY - centerY
-
-    const rotateX = (posY / (rect.height / 2)) * -10
-    const rotateY = (posX / (rect.width / 2)) * 10
-
-    setRotation({ x: rotateX, y: rotateY })
+  // Color configurations based on colorScheme
+  const colorConfig = {
+    default: {
+      effectColors: [[0, 255, 255]], // Default cyan
+      glowClasses: "from-cyan-500 to-cyan-400",
+    },
+    blue: {
+      effectColors: [[125, 211, 252]], // Light blue
+      glowClasses: "from-blue-500 to-blue-400",
+    },
+    pink: {
+      effectColors: [
+        [236, 72, 153], // Pink
+        [232, 121, 249], // Fuchsia
+      ],
+      glowClasses: "from-pink-500 to-fuchsia-400",
+    },
   }
+
+  const { effectColors, glowClasses } = colorConfig[colorScheme]
 
   return (
     <motion.div
-      className="relative p-1"
+      className="group relative h-full"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
       viewport={{ once: true }}
-      onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => {
-        setIsHovered(false)
-        setRotation({ x: 0, y: 0 })
-      }}
-      style={{
-        perspective: "1000px",
-      }}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      <motion.div
-        className="p-6 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm h-full z-10 relative overflow-hidden"
-        style={{
-          transformStyle: "preserve-3d",
-          transform: `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`,
-          transition: "transform 0.2s ease-out",
-        }}
-      >
+      {/* The card with content */}
+      <div className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm h-full relative overflow-hidden">
+        {/* Canvas Effect Container */}
+        <div className="absolute inset-0 z-0 overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <CanvasRevealEffect
+            animationSpeed={3}
+            containerClassName="bg-black"
+            colors={effectColors}
+            dotSize={2}
+            showGradient={true}
+          />
+          <div className="absolute inset-0 [mask-image:radial-gradient(400px_at_center,transparent,white)] bg-black"></div>
+        </div>
+
         {/* Glow effect on hover */}
         <motion.div
-          className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-primary to-accent opacity-0"
+          className={`absolute -inset-0.5 rounded-xl bg-gradient-to-r ${glowClasses} opacity-0 z-10`}
           animate={{
             opacity: isHovered ? 0.3 : 0,
           }}
@@ -62,22 +79,13 @@ const Card3D = ({ icon, title, description }: { icon: React.ReactNode; title: st
         />
 
         {/* Card content */}
-        <div className="relative z-10">
-          <div className="p-3 rounded-lg bg-white/5 w-fit mb-4 text-primary">{icon}</div>
+        <div className="relative z-20 p-6">
+          <div className="p-3 rounded-lg bg-white/5 w-fit mb-4">{icon}</div>
 
           <h3 className="text-lg font-bold mb-2">{title}</h3>
           <p className="text-sm opacity-70">{description}</p>
         </div>
-
-        {/* Background shape */}
-        <div
-          className="absolute -bottom-6 -right-6 w-24 h-24 rounded-full bg-primary/5"
-          style={{
-            transform: "translateZ(-10px)",
-            transformStyle: "preserve-3d",
-          }}
-        />
-      </motion.div>
+      </div>
     </motion.div>
   )
 }
@@ -266,18 +274,21 @@ const createServer = async () => {
               icon={<RocketLaunchIcon className="w-6 h-6" />}
               title="Scalable Architecture"
               description="Designing systems that gracefully handle growing user bases and increased load without sacrificing performance."
+              colorScheme="pink" // Pink/fuchsia gradient
             />
 
             <Card3D
               icon={<DocumentTextIcon className="w-6 h-6" />}
               title="API Development"
               description="Creating intuitive, efficient, and secure APIs that provide seamless integration between services."
+              colorScheme="blue" // Light blue
             />
 
             <Card3D
               icon={<UserGroupIcon className="w-6 h-6" />}
               title="Team Leadership"
               description="Leading development teams with a focus on code quality, best practices, and continuous improvement."
+              colorScheme="default" // Default cyan
             />
           </div>
         </div>

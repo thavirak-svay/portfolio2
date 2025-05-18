@@ -69,33 +69,6 @@ const CodeBlock3D = () => {
   )
 }
 
-// Modern particles background
-const ParticleBackground = () => {
-  const [particles, setParticles] = React.useState<React.ReactNode[]>([])
-
-  // Generate particles only on the client side after component mounts
-  React.useEffect(() => {
-    const newParticles = Array.from({ length: 35 }).map((_, index) => (
-      <div
-        key={index}
-        className="absolute rounded-full bg-white/10"
-        style={{
-          top: `${Math.random() * 100}%`,
-          left: `${Math.random() * 100}%`,
-          width: `${Math.random() * 15 + 3}px`,
-          height: `${Math.random() * 15 + 3}px`,
-          opacity: Math.random() * 0.25,
-          animation: `float ${Math.random() * 10 + 15}s infinite ease-in-out`,
-          animationDelay: `${Math.random() * 5}s`,
-        }}
-      />
-    ))
-    setParticles(newParticles)
-  }, [])
-
-  return <div className="absolute inset-0 overflow-hidden z-0">{particles}</div>
-}
-
 // Feature Card
 const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) => {
   return (
@@ -137,7 +110,6 @@ const ModernHero = () => {
           topOffset={10}
           containerClassName="opacity-90"
         />
-        <ParticleBackground />
       </ClientOnly>
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">

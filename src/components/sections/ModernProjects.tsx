@@ -4,6 +4,7 @@ import React, { useState } from "react"
 import { motion } from "framer-motion"
 import { GlobeAltIcon, CodeBracketIcon, ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline"
 import Image from "next/image"
+import DatabaseWithRestApi from "../ui/database-with-rest-api"
 
 // Project types
 type ProjectCategory = "All" | "API" | "Microservice" | "Database" | "DevOps"
@@ -95,6 +96,86 @@ const ProjectCard = ({ project }: { project: Project }) => {
   )
 }
 
+// API Project Card with DatabaseWithRestApi visualization
+const ApiProjectCard = ({ project }: { project: Project }) => {
+  return (
+    <motion.div
+      className="md:col-span-3 rounded-xl overflow-hidden bg-black/30 backdrop-blur-sm border border-white/10 p-6"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      viewport={{ once: true, amount: 0.3 }}
+    >
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
+        {/* Left side - Project details */}
+        <div className="flex flex-col justify-between h-full">
+          <div>
+            <h3 className="text-2xl font-bold mb-4 text-white">{project.title}</h3>
+
+            <div className="flex flex-wrap gap-2 mb-6">
+              {project.tags.map((tag, index) => (
+                <span
+                  key={index}
+                  className="text-xs px-2 py-1 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white/90"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+
+            <p className="text-white/70 mb-6 leading-relaxed">{project.description}</p>
+          </div>
+
+          {/* Project links */}
+          <div className="flex gap-3">
+            {project.githubUrl && (
+              <motion.a
+                href={project.githubUrl}
+                className="flex items-center gap-1 text-white text-sm bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-lg"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <CodeBracketIcon className="w-4 h-4" />
+                View Code
+              </motion.a>
+            )}
+            {project.liveUrl && (
+              <motion.a
+                href={project.liveUrl}
+                className="flex items-center gap-1 text-white text-sm bg-primary/70 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-lg"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <GlobeAltIcon className="w-4 h-4" />
+                Live Demo
+              </motion.a>
+            )}
+          </div>
+        </div>
+
+        {/* Right side - Database visualization */}
+        <div className="flex items-center justify-center">
+          <DatabaseWithRestApi
+            circleText="API"
+            badgeTexts={{
+              first: "GET",
+              second: "POST",
+              third: "PUT",
+              fourth: "DELETE",
+            }}
+            buttonTexts={{
+              first: "RESTful",
+              second: "v1.0",
+            }}
+            title="Custom RESTful API Architecture"
+            lightColor="#4f8df9" // Using the primary color from your theme
+          />
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
 // Main ModernProjects component
 const ModernProjects = () => {
   // State for category filter
@@ -102,6 +183,18 @@ const ModernProjects = () => {
 
   // Sample projects data
   const projects: Project[] = [
+    {
+      id: 0, // Special API showcase project
+      title: "Advanced RESTful API Platform",
+      description:
+        "A comprehensive RESTful API platform with robust authentication, rate limiting, data validation, and extensive documentation. This platform serves as the backbone for multiple client applications with different access patterns and security requirements. Features include JWT-based authentication, role-based access control, request validation, thorough error handling, and comprehensive logging.",
+      image: "/projects/api.jpg",
+      tags: ["Node.js", "Express", "TypeScript", "MongoDB", "Redis", "JWT", "Swagger", "Docker"],
+      category: ["API", "Database"],
+      githubUrl: "#",
+      liveUrl: "#",
+      featured: true,
+    },
     {
       id: 1,
       title: "E-Commerce Microservices API",
@@ -218,9 +311,14 @@ const ModernProjects = () => {
           animate={{ opacity: 1 }}
           transition={{ staggerChildren: 0.1 }}
         >
-          {filteredProjects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
-          ))}
+          {filteredProjects.map((project) => {
+            // Use special ApiProjectCard for the API showcase project (id: 0)
+            if (project.id === 0) {
+              return <ApiProjectCard key={project.id} project={project} />
+            }
+            // Use regular ProjectCard for all other projects
+            return <ProjectCard key={project.id} project={project} />
+          })}
         </motion.div>
 
         {/* View all projects button */}
