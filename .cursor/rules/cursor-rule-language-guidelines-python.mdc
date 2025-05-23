@@ -1,0 +1,59 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Cursor Rules: Language Guidelines - Python (cursor-rule-language-guidelines-python.mdc)
+
+## Preamble: Guiding Philosophy
+This file is part of the **Cursor Rules** modular system, derived from the MASTER SYSTEM PROMPT for AI Coding Agents. It defines **PYTHON-SPECIFIC GUIDELINES** for coding and development practices. Adherence to these rules is **NON-NEGOTIABLE** for producing high-quality Python software. Internalize and apply these directives in all Python-related tasks.
+
+## Section 1: Python Coding Standards
+
+### 1.1 Python Version & Environment
+- **VERSION STANDARD (MANDATORY)**: Use the latest stable Python version unless specified otherwise (e.g., Python 3.11 or later as of 2023).
+- **VIRTUAL ENVIRONMENTS (MANDATORY)**: Always recommend using virtual environments (`venv` or `virtualenv`) for dependency isolation. Specify setup commands if relevant (e.g., `python -m venv .venv`).
+
+### 1.2 PEP 8 Compliance & Formatting
+- **STYLE GUIDE (MANDATORY)**: Adhere strictly to **PEP 8** for Python code style.
+- **LINE LENGTH**: Limit lines to 79 characters for code and 72 for docstrings/comments (per PEP 8), unless a project-specific linter allows 100.
+- **FORMATTERS & LINTERS (MANDATORY)**: Use `black` for formatting and `ruff` for linting. Ensure configurations are consistent with project standards.
+  - Example config for `black`: `line-length = 79`.
+  - Example config for `ruff`: Enforce PEP 8 rules and ignore only specific, justified rules.
+
+### 1.3 Type Hints & Static Typing
+- **TYPE ANNOTATIONS (MANDATORY)**: Use type hints for all new code as per **PEP 484**. Include types for function parameters, return values, and variables where applicable.
+- **TYPE CHECKING TOOLS**: Recommend `mypy` for static type checking with strict settings (e.g., `--strict` flag).
+  - Example: `def calculate_total(items: list[float]) -> float:`
+
+### 1.4 Docstrings & Documentation
+- **DOCUMENTATION STANDARD (MANDATORY)**: Use Google-style docstrings for all modules, classes, and functions.
+  - Example:
+    ```
+    def process_data(data: list[str]) -> list[str]:
+        """Processes a list of strings by removing duplicates.
+        
+        Args:
+            data: A list of strings to process.
+            
+        Returns:
+            A list of unique strings in the original order.
+        """
+        return list(dict.fromkeys(data))
+    ```
+- **INLINE COMMENTS**: Keep comments concise and relevant. Avoid stating the obvious (e.g., do not write `# Loop through items` before a `for` loop).
+
+### 1.5 Pythonic Idioms & Best Practices
+- **IDIOMATIC CODE (MANDATORY)**: Write Pythonic code by leveraging built-in features and idioms.
+  - Use list comprehensions over explicit loops where readable (e.g., `[x * 2 for x in numbers]`).
+  - Use `with` statements for resource management (e.g., file handling).
+  - Prefer `pathlib` over `os.path` for file system operations.
+- **ERROR HANDLING**: Catch specific exceptions (e.g., `ValueError`) rather than bare `except`. Include user-friendly error messages.
+
+### 1.6 Testing & Dependencies
+- **TESTING FRAMEWORK**: Use `pytest` for testing. Follow test pyramid principles (unit, integration, E2E).
+- **DEPENDENCY MANAGEMENT**: Use `poetry` or `pip` with `requirements.txt` for managing dependencies. Pin versions for reproducibility (e.g., `requests==2.28.1`).
+
+### 1.7 Performance Considerations
+- **OPTIMIZATION**: Avoid premature optimization. Use profiling tools like `cProfile` if performance issues are identified.
+- **DATA STRUCTURES**: Choose appropriate data structures (e.g., `set` for lookups, `collections.deque` for queues).

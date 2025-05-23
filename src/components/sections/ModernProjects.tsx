@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 import { GlobeAltIcon, CodeBracketIcon, ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline"
 import Image from "next/image"
 import DatabaseWithRestApi from "../ui/database-with-rest-api"
+import { RetroGrid } from "@/components/ui/retro-grid"
 
 // Project types
 type ProjectCategory = "All" | "API" | "Microservice" | "Database" | "DevOps"
@@ -178,6 +179,9 @@ const ApiProjectCard = ({ project }: { project: Project }) => {
 
 // Main ModernProjects component
 const ModernProjects = () => {
+  const [selectedCategory, setSelectedCategory] = useState<string>("all")
+  const [visibleProjects, setVisibleProjects] = useState<number>(6)
+
   // State for category filter
   const [activeCategory, setActiveCategory] = useState<ProjectCategory>("All")
 
@@ -199,9 +203,9 @@ const ModernProjects = () => {
       id: 1,
       title: "E-Commerce Microservices API",
       description:
-        "A complete microservices architecture for e-commerce platforms with service discovery, API gateway, and containerized deployment.",
-      image: "/projects/ecommerce-api.jpg",
-      tags: ["Node.js", "Express", "MongoDB", "Docker", "Kubernetes", "Microservices"],
+        "Developed a suite of microservices for an e-commerce platform, handling product catalog, user accounts, orders, and payments. Focused on high availability and fault tolerance.",
+      image: "/projects/api.jpg",
+      tags: ["Node.js", "TypeScript", "Microservices", "RabbitMQ", "PostgreSQL", "Docker", "Kubernetes"],
       category: ["API", "Microservice"],
       githubUrl: "#",
       liveUrl: "#",
@@ -209,22 +213,22 @@ const ModernProjects = () => {
     },
     {
       id: 2,
-      title: "Real-time Analytics Platform",
+      title: "Real-time Analytics Dashboard",
       description:
-        "High-performance analytics system processing millions of events per second with real-time dashboards.",
+        "Built a backend system to process and display real-time analytics data using WebSockets and a time-series database. Optimized for high-volume data ingestion and low-latency querying.",
       image: "/projects/analytics.jpg",
-      tags: ["Python", "Kafka", "PostgreSQL", "Redis", "Docker"],
-      category: ["Database", "API"],
+      tags: ["Python", "FastAPI", "WebSockets", "InfluxDB", "Redis", "Grafana"],
+      category: ["API", "Database"],
       githubUrl: "#",
       featured: false,
     },
     {
       id: 3,
-      title: "Serverless Content Management API",
+      title: "Headless CMS Backend",
       description:
-        "Scalable content management system built using serverless architecture for maximum cost efficiency.",
-      image: "/projects/cms.jpg",
-      tags: ["Node.js", "AWS Lambda", "DynamoDB", "Serverless", "GraphQL"],
+        "Created a flexible and scalable backend for a headless CMS, allowing content creators to manage and distribute content across multiple channels via a robust API.",
+      image: "/projects/database.jpg",
+      tags: ["Node.js", "NestJS", "GraphQL", "PostgreSQL", "Elasticsearch", "AWS S3"],
       category: ["API", "Database"],
       githubUrl: "#",
       liveUrl: "#",
@@ -232,23 +236,36 @@ const ModernProjects = () => {
     },
     {
       id: 4,
-      title: "Cloud Infrastructure Automation",
+      title: "Cloud Infrastructure Orchestration",
       description:
-        "Infrastructure as Code implementation with comprehensive CI/CD pipelines for automated deployments.",
-      image: "/projects/infrastructure.jpg",
-      tags: ["Terraform", "AWS", "GitHub Actions", "Docker", "Kubernetes"],
+        "Designed and implemented automated infrastructure provisioning and deployment pipelines using Terraform and Ansible on AWS. Managed scalable and resilient cloud environments.",
+      image: "/projects/cicd.jpg",
+      tags: ["Terraform", "Ansible", "AWS", "Docker", "Kubernetes", "CI/CD"],
       category: ["DevOps"],
       githubUrl: "#",
       featured: true,
     },
     {
       id: 5,
-      title: "Distributed Cache System",
-      description: "Custom distributed caching solution with intelligent eviction policies and cluster management.",
-      image: "/projects/cache.jpg",
-      tags: ["Go", "Redis", "gRPC", "Prometheus", "Kubernetes"],
-      category: ["Database", "Microservice"],
+      title: "Distributed Caching System",
+      description:
+        "Architected and implemented a distributed caching layer using Redis to reduce database load and improve application response times for a high-traffic web application.",
+      image: "/projects/database.jpg",
+      tags: ["Redis", "Node.js", "System Design", "Performance Optimization"],
+      category: ["Database", "API"],
       githubUrl: "#",
+      featured: false,
+    },
+    {
+      id: 6,
+      title: "Secure Authentication Service",
+      description:
+        "Developed a centralized authentication and authorization service using OAuth 2.0 and JWT, providing single sign-on (SSO) capabilities for multiple applications.",
+      image: "/projects/auth.jpg",
+      tags: ["OAuth 2.0", "JWT", "Spring Boot", "Java", "Security", "OpenID Connect"],
+      category: ["API", "Microservice"],
+      githubUrl: "#",
+      liveUrl: "#",
       featured: false,
     },
   ]
@@ -261,15 +278,20 @@ const ModernProjects = () => {
   const categories: ProjectCategory[] = ["All", "API", "Microservice", "Database", "DevOps"]
 
   return (
-    <section id="projects" className="py-20 px-6 relative">
+    <section id="projects" className="py-20 px-6 relative overflow-hidden">
       {/* Background gradients */}
       <div className="absolute top-1/3 left-1/4 w-64 h-64 bg-primary/20 rounded-full filter blur-3xl opacity-30 -z-10"></div>
       <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-accent/20 rounded-full filter blur-3xl opacity-30 -z-10"></div>
 
-      <div className="max-w-7xl mx-auto">
+      {/* RetroGrid for top 1/3 of section only */}
+      <div className="absolute inset-x-0 top-0 h-1/3 z-0 overflow-hidden">
+        <RetroGrid className="opacity-70" />
+      </div>
+
+      <div className="max-w-7xl mx-auto relative z-10">
         {/* Section header */}
         <motion.div
-          className="text-center mb-16"
+          className="text-center mt-8 mb-36 relative"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}

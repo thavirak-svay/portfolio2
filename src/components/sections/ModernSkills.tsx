@@ -3,8 +3,28 @@
 import React, { useState } from "react"
 import { motion } from "framer-motion"
 import { CodeBracketIcon, ServerIcon, CubeIcon, CircleStackIcon } from "@heroicons/react/24/outline"
+import {
+  Brain,
+  Database,
+  Cloud,
+  Zap,
+  GitMerge,
+  Settings,
+  Share2,
+  ShieldCheck,
+  SlidersHorizontal,
+  TerminalSquare,
+  Workflow,
+  Rabbit,
+  Waves,
+  Network,
+  Cable,
+} from "lucide-react"
+import { GlowingEffect } from "@/components/ui/glowing-effect"
+import DotPattern from "@/components/ui/dot-pattern-1"
+import { RetroGrid } from "@/components/ui/retro-grid"
 
-// Skill progress component with radial progress indicator and hover effect
+// Skill card with progress indicator
 const SkillCard = ({
   icon,
   title,
@@ -20,107 +40,97 @@ const SkillCard = ({
 }) => {
   const [isHovered, setIsHovered] = useState(false)
 
-  // Calculate the circle's stroke properties
-  const radius = 33
-  const circumference = 2 * Math.PI * radius
-  const strokeDashoffset = circumference - (proficiency / 100) * circumference
-
-  // Different background colors based on theme
-  const bgColorMap = {
-    primary: "bg-primary/5 border-primary/20",
-    accent: "bg-accent/5 border-accent/20",
-    secondary: "bg-secondary/5 border-secondary/20",
+  // Define color classes based on theme color
+  const colorClasses = {
+    primary: {
+      text: "text-primary",
+      border: "group-hover:border-primary",
+      progressBg: "bg-primary/20",
+      progressFill: "bg-primary",
+      icon: "text-primary group-hover:bg-primary/10",
+    },
+    accent: {
+      text: "text-accent",
+      border: "group-hover:border-accent",
+      progressBg: "bg-accent/20",
+      progressFill: "bg-accent",
+      icon: "text-accent group-hover:bg-accent/10",
+    },
+    secondary: {
+      text: "text-secondary",
+      border: "group-hover:border-secondary",
+      progressBg: "bg-secondary/20",
+      progressFill: "bg-secondary",
+      icon: "text-secondary group-hover:bg-secondary/10",
+    },
   }
 
-  // Different text colors based on theme
-  const textColorMap = {
-    primary: "text-primary",
-    accent: "text-accent",
-    secondary: "text-secondary",
-  }
+  const classes = colorClasses[color]
 
   return (
     <motion.div
-      className={`relative p-6 rounded-xl border ${bgColorMap[color]} backdrop-blur-sm flex flex-col gap-4`}
+      className="h-full"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      viewport={{ once: true, amount: 0.3 }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      viewport={{ once: true }}
     >
-      {/* Radial progress ring */}
-      <div className="w-20 h-20 relative">
-        <svg className="w-20 h-20" viewBox="0 0 100 100">
-          {/* Background ring */}
-          <circle
-            className="text-gray-300/20 dark:text-gray-700/30"
-            strokeWidth="6"
-            stroke="currentColor"
-            fill="transparent"
-            r={radius}
-            cx="50"
-            cy="50"
-          />
+      {/* Outer container with border for glowing effect */}
+      <div
+        className="group relative rounded-[1.25rem] border-[0.75px] border-white/10 p-2 md:rounded-[1.5rem] md:p-3 h-full"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        {/* Add GlowingEffect */}
+        <GlowingEffect
+          spread={40}
+          glow={true}
+          disabled={false}
+          proximity={120}
+          inactiveZone={0}
+          borderWidth={3}
+          variant="lightgray"
+        />
 
-          {/* Progress ring */}
-          <motion.circle
-            className={textColorMap[color]}
-            strokeWidth="6"
-            strokeLinecap="round"
-            stroke="currentColor"
-            fill="transparent"
-            r={radius}
-            cx="50"
-            cy="50"
-            initial={{ strokeDashoffset: circumference }}
-            animate={{ strokeDashoffset }}
-            transition={{ duration: 1.5, ease: "easeInOut" }}
-            strokeDasharray={circumference}
-          />
-        </svg>
+        {/* Inner content container with dot pattern */}
+        <div className="relative flex h-full flex-col justify-between overflow-hidden rounded-xl border-[0.75px] border-white/10 bg-white/5 backdrop-blur-sm p-6">
+          {/* Skill header with icon */}
+          <div className="flex items-start justify-between mb-4 relative z-10">
+            <div className={`p-3 rounded-lg bg-white/5 transition-colors duration-300 ${classes.icon}`}>{icon}</div>
+            <h3 className={`text-lg font-bold transition-colors duration-300 group-hover:${classes.text}`}>{title}</h3>
+          </div>
 
-        {/* Icon in the center */}
-        <div className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ${textColorMap[color]}`}>
-          {icon}
+          {/* Progress bar with enhanced animation */}
+          <div className="mb-4 relative z-10">
+            <div className="flex justify-between mb-1">
+              <span className="text-sm opacity-70">Proficiency</span>
+              <span className={`text-sm font-medium ${classes.text}`}>{proficiency}%</span>
+            </div>
+            <div className={`h-1.5 w-full rounded-full ${classes.progressBg}`}>
+              <motion.div
+                className={`h-full rounded-full ${classes.progressFill}`}
+                initial={{ width: 0 }}
+                whileInView={{ width: `${proficiency}%` }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.2, delay: 0.2 }}
+              />
+            </div>
+          </div>
+
+          {/* Description */}
+          <p className="text-sm leading-relaxed opacity-70 relative z-10">{description}</p>
         </div>
-      </div>
-
-      {/* Skill title and proficiency */}
-      <div className="space-y-1">
-        <div className="flex items-center justify-between">
-          <h3 className="font-bold">{title}</h3>
-          <span className={`${textColorMap[color]} font-bold`}>{proficiency}%</span>
-        </div>
-
-        {/* Skill description with animation */}
-        <motion.p
-          className="text-sm opacity-70"
-          initial={{ height: 0, opacity: 0 }}
-          animate={{
-            height: isHovered ? "auto" : 0,
-            opacity: isHovered ? 1 : 0,
-          }}
-          transition={{ duration: 0.3 }}
-        >
-          {description}
-        </motion.p>
       </div>
     </motion.div>
   )
 }
 
-// Modern skill tag component for smaller skills
-const SkillTag = ({ label, icon }: { label: string; icon?: React.ReactNode }) => {
+// Skill tag component for additional technologies
+const SkillTag = ({ label }: { label: string; icon?: React.ReactNode }) => {
   return (
-    <motion.div
-      className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-white/10 bg-white/5 backdrop-blur-md"
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-    >
-      {icon && <span className="text-primary">{icon}</span>}
+    <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-white/10 bg-white/5 backdrop-blur-sm">
       <span className="text-sm">{label}</span>
-    </motion.div>
+    </div>
   )
 }
 
@@ -129,69 +139,124 @@ const ModernSkills = () => {
   // Main backend skills data
   const backendSkills = [
     {
-      icon: <ServerIcon className="w-8 h-8" />,
+      icon: <ServerIcon className="w-6 h-6" />,
       title: "Node.js",
       proficiency: 95,
-      description:
-        "Expert in building high-performance backend services, RESTful APIs, and microservices using Express and NestJS frameworks.",
+      description: "Building high-performance backend services, RESTful APIs & microservices with Express & NestJS.",
       color: "primary" as const,
     },
     {
-      icon: <CodeBracketIcon className="w-8 h-8" />,
+      icon: <CodeBracketIcon className="w-6 h-6" />,
       title: "Python",
       proficiency: 85,
-      description: "Proficient with FastAPI, Flask, and Django for web services, data processing, and automation.",
+      description: "Creating robust web services with FastAPI, Flask & Django for data processing & automation.",
       color: "accent" as const,
     },
     {
-      icon: <CubeIcon className="w-8 h-8" />,
-      title: "Go",
+      icon: <CubeIcon className="w-6 h-6" />,
+      title: "Go (Golang)",
       proficiency: 78,
-      description: "Building concurrent, high-throughput backend services with excellent performance characteristics.",
+      description: "Developing concurrent, high-throughput backend services with exceptional performance.",
       color: "secondary" as const,
     },
     {
-      icon: <CircleStackIcon className="w-8 h-8" />,
+      icon: <CircleStackIcon className="w-6 h-6" />,
       title: "Database Design",
       proficiency: 92,
-      description:
-        "Schema design, optimization, and management of SQL and NoSQL databases including PostgreSQL, MongoDB, and Redis.",
+      description: "Expert in schema design, query optimization & management of SQL and NoSQL databases.",
       color: "primary" as const,
     },
   ]
 
   // Additional skills for tags display
   const additionalSkills = [
-    "TypeScript",
-    "GraphQL",
-    "REST API",
-    "Docker",
-    "Kubernetes",
-    "AWS",
-    "CI/CD",
-    "Microservices",
-    "Redis",
-    "MongoDB",
-    "PostgreSQL",
-    "MySQL",
-    "Serverless",
-    "RabbitMQ",
-    "Kafka",
-    "gRPC",
-    "JWT",
-    "OAuth",
-    "WebSockets",
+    { name: "TypeScript" },
+    { name: "GraphQL" },
+    { name: "REST API" },
+    { name: "Docker" },
+    { name: "Kubernetes" },
+    { name: "AWS" },
+    { name: "CI/CD" },
+    { name: "Microservices" },
+    { name: "Redis" },
+    { name: "MongoDB" },
+    { name: "PostgreSQL" },
+    { name: "MySQL" },
+    { name: "Serverless" },
+    { name: "RabbitMQ" },
+    { name: "Kafka" },
+    { name: "gRPC" },
+    { name: "JWT" },
+    { name: "OAuth" },
+    { name: "WebSockets" },
   ]
 
-  return (
-    <section id="skills" className="relative py-20 px-6 overflow-hidden">
-      {/* Background blur elements */}
-      <div className="absolute top-1/4 right-0 w-72 h-72 rounded-full bg-primary/20 filter blur-3xl opacity-40 -z-10"></div>
-      <div className="absolute bottom-1/3 left-0 w-80 h-80 rounded-full bg-accent/20 filter blur-3xl opacity-30 -z-10"></div>
+  // Function to create stat cards with glowing effect
+  const StatCard = ({
+    number,
+    title,
+    description,
+    delay = 0,
+    color = "primary",
+  }: {
+    number: string
+    title: string
+    description: string
+    delay?: number
+    color?: "primary" | "accent" | "secondary"
+  }) => {
+    const colorClass = color === "primary" ? "text-primary" : color === "accent" ? "text-accent" : "text-secondary"
+    // Determine if this is the Projects card to add enhanced glowing effect
+    const isProjectsCard = title === "Projects Completed"
 
-      <div className="max-w-7xl mx-auto">
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay }}
+        viewport={{ once: true }}
+        className="h-full"
+      >
+        {/* Outer container with border for glowing effect */}
+        <div className="group relative rounded-[1.25rem] border-[0.75px] border-white/10 p-2 md:rounded-[1.5rem] md:p-3 h-full">
+          {/* Add GlowingEffect */}
+          <GlowingEffect
+            spread={isProjectsCard ? 60 : 40}
+            glow={true}
+            disabled={false}
+            proximity={isProjectsCard ? 120 : 64}
+            inactiveZone={isProjectsCard ? 0 : 0.01}
+            borderWidth={isProjectsCard ? 4 : 3}
+            variant="lightgray"
+          />
+
+          {/* Inner content container */}
+          <div className="relative flex h-full flex-col justify-between overflow-hidden rounded-xl border-[0.75px] border-white/10 bg-white/5 backdrop-blur-sm p-6">
+            {/* Content */}
+            <div className={`text-3xl font-bold ${colorClass} mb-2 relative z-10`}>{number}</div>
+            <h3 className="text-lg font-semibold mb-1 relative z-10">{title}</h3>
+            <p className="text-sm opacity-70 relative z-10">{description}</p>
+          </div>
+        </div>
+      </motion.div>
+    )
+  }
+
+  return (
+    <section id="skills" className="py-20 px-6 relative overflow-hidden">
+      {/* Background blur elements */}
+      <div className="absolute top-40 right-10 w-80 h-80 bg-primary/10 rounded-full filter blur-3xl opacity-30 -z-10"></div>
+      <div className="absolute bottom-40 left-10 w-80 h-80 bg-accent/10 rounded-full filter blur-3xl opacity-20 -z-10"></div>
+
+      {/* RetroGrid for top 1/3 of section only */}
+      <div className="absolute inset-x-0 top-0 h-1/3 z-0 overflow-hidden">
+        <RetroGrid className="opacity-70" />
+      </div>
+
+      <div className="max-w-7xl mx-auto relative z-10">
+        {/* Section header */}
         <motion.div
-          className="text-center mb-16"
+          className="text-center mt-8 mb-36 relative"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -207,11 +272,11 @@ const ModernSkills = () => {
           </p>
         </motion.div>
 
-        {/* Main skills with circular progress */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-12">
+        {/* Main skills grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
           {backendSkills.map((skill, index) => (
             <SkillCard
-              key={index}
+              key={`skill-${index}`}
               icon={skill.icon}
               title={skill.title}
               proficiency={skill.proficiency}
@@ -221,69 +286,56 @@ const ModernSkills = () => {
           ))}
         </div>
 
+        {/* Experience levels section */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+          <StatCard
+            number="7+"
+            title="Years Experience"
+            description="Building production-grade backend systems for diverse industries."
+            color="primary"
+            delay={0.1}
+          />
+          <StatCard
+            number="20+"
+            title="Projects Completed"
+            description="From robust microservices to scalable monoliths, delivering reliable solutions."
+            color="accent"
+            delay={0.2}
+          />
+          <StatCard
+            number="99%+"
+            title="Uptime Achieved"
+            description="Consistently delivering high-availability systems that meet client needs."
+            color="secondary"
+            delay={0.3}
+          />
+        </div>
+
         {/* Additional skills section */}
         <motion.div
-          className="mt-12"
+          className="mt-6 p-6 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm relative"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
         >
-          <h3 className="text-xl font-semibold mb-6">Additional Technologies</h3>
-          <div className="flex flex-wrap gap-3">
+          {/* Add dot pattern only to this section */}
+          <DotPattern width={8} height={8} cx={1} cy={1} cr={0.5} className="fill-white/5 opacity-50" />
+
+          <h3 className="text-xl font-semibold mb-6 relative z-10">Additional Technologies</h3>
+          <div className="flex flex-wrap gap-3 relative z-10">
             {additionalSkills.map((skill, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.05 * index, duration: 0.3 }}
+                transition={{ delay: index * 0.05, duration: 0.3 }}
               >
-                <SkillTag label={skill} />
+                <SkillTag label={skill.name} />
               </motion.div>
             ))}
           </div>
         </motion.div>
-
-        {/* Experience levels section */}
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
-          <motion.div
-            className="p-6 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm"
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            viewport={{ once: true }}
-          >
-            <div className="text-4xl font-bold text-primary mb-2">5+</div>
-            <h3 className="text-xl font-semibold mb-2">Years Experience</h3>
-            <p className="text-sm opacity-70">Building production-grade backend systems for various industries.</p>
-          </motion.div>
-
-          <motion.div
-            className="p-6 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm"
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            viewport={{ once: true }}
-          >
-            <div className="text-4xl font-bold text-accent mb-2">30+</div>
-            <h3 className="text-xl font-semibold mb-2">Projects Completed</h3>
-            <p className="text-sm opacity-70">From microservices to monoliths, delivering reliable solutions.</p>
-          </motion.div>
-
-          <motion.div
-            className="p-6 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm"
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            viewport={{ once: true }}
-          >
-            <div className="text-4xl font-bold text-secondary mb-2">99%</div>
-            <h3 className="text-xl font-semibold mb-2">Success Rate</h3>
-            <p className="text-sm opacity-70">
-              Consistent delivery of high-quality code that meets client requirements.
-            </p>
-          </motion.div>
-        </div>
       </div>
     </section>
   )

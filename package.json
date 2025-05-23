@@ -11,9 +11,11 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "@react-three/fiber": "^9.1.2",
+    "@stagewise/toolbar-next": "^0.1.2",
     "clsx": "^2.1.1",
     "framer-motion": "^12.11.4",
     "lucide-react": "^0.510.0",
+    "motion": "^12.12.1",
     "next": "15.3.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

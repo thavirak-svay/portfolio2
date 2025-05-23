@@ -94,6 +94,20 @@ body {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
+/* Grid animation for RetroGrid component */
+@keyframes grid {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+.animate-grid {
+  animation: grid 15s linear infinite;
+}
+
 @keyframes shine {
   0% {
     transform: translateX(-100%);

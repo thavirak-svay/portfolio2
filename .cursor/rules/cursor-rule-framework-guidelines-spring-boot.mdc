@@ -1,0 +1,218 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Cursor Rules: Framework Guidelines - Spring Boot (cursor-rule-framework-guidelines-spring-boot.mdc)
+
+## Preamble: Guiding Philosophy
+This file is part of the **Cursor Rules** modular system, derived from the MASTER SYSTEM PROMPT for AI Coding Agents. It defines **SPRING BOOT-SPECIFIC GUIDELINES** for backend development. Adherence to these rules is **NON-NEGOTIABLE** for producing high-quality, secure, and maintainable Spring Boot applications. Internalize and apply these directives in all Spring Boot-related tasks.
+
+## Section 1: Spring Boot Project Setup & Configuration
+
+### 1.1 Project Initialization
+- **INITIALIZATION TOOL (MANDATORY)**: Use Spring Initializr (either via `start.spring.io` or IDE integration) to set up new Spring Boot projects with appropriate dependencies.
+  - Core Dependencies: Include `spring-boot-starter-web` for REST APIs, `spring-boot-starter-data-jpa` for database access, and others as needed (e.g., `spring-boot-starter-security`).
+- **JAVA VERSION**: Use the latest LTS Java version supported by Spring Boot (e.g., Java 17 or 21 as of 2023) unless project constraints specify otherwise.
+- **BUILD TOOL**: Prefer Maven over Gradle unless the project explicitly requires Gradle. Ensure consistent versioning (e.g., Spring Boot 3.x).
+
+### 1.2 Project Structure
+- **PACKAGE ORGANIZATION (MANDATORY)**: Follow a layered architecture with clear package separation.
+  - Example:
+    ```
+    com.example.myapp/
+    ├── config/          # Configuration classes
+    ├── controller/      # REST controllers
+    ├── service/         # Business logic
+    ├── repository/      # Data access layer (JPA repositories)
+    ├── model/           # Entity and DTO classes
+    ├── exception/       # Custom exceptions
+    └── util/            # Utility classes
+    ```
+- **APPLICATION CLASS**: Place the main `@SpringBootApplication` class at the root package (e.g., `com.example.myapp.MyAppApplication`) to ensure component scanning.
+
+### 1.3 Configuration Management
+- **PROPERTIES/YML (MANDATORY)**: Use `application.yml` or `application.properties` for configuration. Prefer YAML for readability unless specified otherwise.
+  - Example (`application.yml`):
+    ```
+    server:
+      port: 8080
+    spring:
+      datasource:
+        url: jdbc:mysql://localhost:3306/mydb
+        username: root
+        password: ${DB_PASSWORD}
+    ```
+- **ENVIRONMENT-SPECIFIC CONFIG**: Use profile-specific files (e.g., `application-dev.yml`, `application-prod.yml`) for environment configurations.
+- **SECRETS MANAGEMENT**: Avoid hardcoding sensitive data (e.g., passwords). Use environment variables or a secrets manager (e.g., Spring Cloud Vault).
+
+## Section 2: Coding Standards & Best Practices
+
+### 2.1 Controller Layer
+- **REST CONTROLLERS (MANDATORY)**: Annotate controllers with `@RestController` and map endpoints with `@RequestMapping` or specific HTTP method annotations (`@GetMapping`, `@PostMapping`, etc.).
+- **RESPONSE STATUS**: Use appropriate HTTP status codes with `@ResponseStatus` or `ResponseEntity` (e.g., `ResponseEntity.ok(result)` for 200, `ResponseEntity.created(location).build()` for 201).
+- **INPUT VALIDATION**: Apply validation annotations (e.g., `@NotNull`, `@Size`) on DTOs with `@Valid` in controller methods.
+  - Example:
+    ```
+    @PostMapping("/users")
+    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) {
+        UserDTO savedUser = userService.save(userDTO);
+        return ResponseEntity.created(URI.create("/users/" + savedUser.getId())).body(savedUser);
+    }
+    ```
+
+### 2.2 Service Layer
+- **BUSINESS LOGIC (MANDATORY)**: Centralize business logic in service classes annotated with `@Service`. Keep services focused on a single responsibility.
+- **TRANSACTION MANAGEMENT**: Use `@Transactional` for methods requiring database transactions, specifying propagation and isolation if needed.
+  - Example:
+    ```
+    @Service
+    public class UserService {
+        @Transactional
+        public UserDTO save(UserDTO userDTO) {
+            // Business logic and persistence
+            return userDTO;
+        }
+    }
+    ```
+
+### 2.3 Data Access Layer
+- **JPA REPOSITORIES (MANDATORY)**: Use Spring Data JPA with `@Repository` interfaces extending `JpaRepository` or `CrudRepository` for basic CRUD operations.
+- **CUSTOM QUERIES**: Define custom queries with `@Query` or derived query methods (e.g., `findByEmailContainingIgnoreCase`).
+- **ENTITY DESIGN**: Annotate entities with `@Entity`, define relationships with `@OneToMany`, `@ManyToOne`, etc., and use `@Id` with `@GeneratedValue` for primary keys.
+  - Example:
+    ```
+    @Entity
+    public class User {
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long id;
+        @Column(nullable = false, unique = true)
+        private String email;
+        // Getters and setters
+    }
+    ```
+
+### 2.4 DTO Usage
+- **DATA TRANSFER (MANDATORY)**: Use Data Transfer Objects (DTOs) to decouple API contracts from entity models. Map between entities and DTOs using tools like MapStruct or manually.
+  - Example:
+    ```
+    public class UserDTO {
+        private Long id;
+        private String email;
+        // Getters and setters
+    }
+    ```
+
+## Section 3: Security Practices
+
+### 3.1 Authentication & Authorization
+- **SECURITY CONFIG (MANDATORY)**: Use Spring Security to protect endpoints. Configure authentication (e.g., JWT, OAuth2) and authorization (e.g., role-based access).
+  - Example:
+    ```
+    @Configuration
+    @EnableWebSecurity
+    public class SecurityConfig {
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+            http.authorizeHttpRequests()
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                .requestMatchers("/api/public/**").permitAll()
+                .anyRequest().authenticated()
+                .and().httpBasic();
+            return http.build();
+        }
+    }
+    ```
+- **PASSWORD ENCODING**: Always encode passwords using `BCryptPasswordEncoder` or similar.
+- **CSRF & CORS**: Disable CSRF for stateless APIs if using JWT. Configure CORS for frontend access if needed.
+
+### 3.2 Input Validation & Sanitization
+- **VALIDATION (MANDATORY)**: Validate all incoming data using Bean Validation (JSR 380) annotations.
+- **SQL INJECTION PREVENTION**: Use parameterized queries (handled by JPA by default) and avoid concatenating user input into queries.
+
+## Section 4: Error Handling & Logging
+
+### 4.1 Global Exception Handling
+- **CENTRALIZED HANDLING (MANDATORY)**: Use `@ControllerAdvice` with `@ExceptionHandler` to manage exceptions globally and return consistent error responses.
+  - Example:
+    ```
+    @ControllerAdvice
+    public class GlobalExceptionHandler {
+        @ExceptionHandler(ResourceNotFoundException.class)
+        public ResponseEntity<ErrorResponse> handleNotFound(ResourceNotFoundException ex) {
+            ErrorResponse error = new ErrorResponse("NOT_FOUND", ex.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        }
+    }
+    ```
+
+### 4.2 Logging Practices
+- **LOGGING FRAMEWORK**: Use SLF4J with Logback (Spring Boot default) for logging.
+- **LOG LEVELS (MANDATORY)**: Log appropriately (e.g., `DEBUG` for detailed info, `INFO` for key operations, `ERROR` for failures).
+- **STRUCTURED LOGGING**: Include relevant context (e.g., user ID, request ID) in logs. Avoid logging sensitive data (e.g., passwords).
+
+## Section 5: Testing & Documentation
+
+### 5.1 Testing Strategy
+- **UNIT TESTS (MANDATORY)**: Test service and utility classes with JUnit 5 and Mockito for mocking dependencies.
+  - Example:
+    ```
+    @SpringBootTest
+    class UserServiceTest {
+        @MockBean
+        private UserRepository userRepository;
+        @Autowired
+        private UserService userService;
+        @Test
+        void testSaveUser() {
+            // Test logic with mocks
+        }
+    }
+    ```
+- **INTEGRATION TESTS**: Use `@SpringBootTest` or Testcontainers for database and API endpoint testing.
+- **SLICE TESTS**: Use Spring Boot’s test slices (e.g., `@WebMvcTest` for controllers, `@DataJpaTest` for repositories).
+
+### 5.2 API Documentation
+- **SWAGGER/OPENAPI (MANDATORY)**: Use Springdoc OpenAPI (or Swagger) to document REST APIs. Annotate endpoints with `@Operation`, `@ApiResponses`, etc.
+  - Example:
+    ```
+    @Operation(summary = "Get user by ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "User found"),
+        @ApiResponse(responseCode = "404", description = "User not found")
+    })
+    @GetMapping("/users/{id}")
+    public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
+        // Implementation
+    }
+    ```
+
+## Section 6: Performance & Deployment
+
+### 6.1 Performance Optimization
+- **CACHING**: Use Spring’s caching abstraction with `@Cacheable`, `@CachePut`, etc., integrating with providers like EhCache or Redis.
+- **LAZY LOADING**: Configure JPA relationships with `fetch = FetchType.LAZY` to avoid unnecessary data fetching. Use `@Transactional` or explicit fetching for required data.
+- **DATABASE QUERIES**: Optimize queries with proper indexing and avoid N+1 query issues using `JOIN FETCH` or `@EntityGraph`.
+
+### 6.2 Deployment Practices
+- **EXECUTABLE JAR (MANDATORY)**: Build Spring Boot applications as executable JARs using `mvn package` or equivalent. Use `spring-boot:run` for local testing.
+- **CONTAINERIZATION**: Package applications in Docker images for deployment. Use multi-stage builds for smaller images.
+  - Example Dockerfile:
+    ```
+    FROM maven:3.8.6-openjdk-17 AS build
+    WORKDIR /app
+    COPY . .
+    RUN mvn clean package -DskipTests
+    
+    FROM openjdk:17-slim
+    WORKDIR /app
+    COPY --from=build /app/target/myapp-0.0.1-SNAPSHOT.jar app.jar
+    ENTRYPOINT ["java", "-jar", "app.jar"]
+    ```
+- **CLOUD DEPLOYMENT**: Deploy to cloud platforms like AWS, Azure, or GCP using services like Elastic Beanstalk, Kubernetes, or App Services. Configure health checks and scaling policies.
+
+### 6.3 Monitoring & Observability
+- **ACTUATOR (MANDATORY)**: Enable Spring Boot Actuator for monitoring endpoints (e.g., `/actuator/health`, `/actuator/metrics`).
+- **METRICS & TRACING**: Integrate with monitoring tools like Prometheus and Grafana for metrics, and Spring Cloud Sleuth with Zipkin for distributed tracing.
+- **LOG AGGREGATION**: Forward logs to centralized systems (e.g., ELK Stack, CloudWatch) for analysis.

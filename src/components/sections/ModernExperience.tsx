@@ -2,7 +2,15 @@
 
 import React, { useState } from "react"
 import { motion } from "framer-motion"
-import { BriefcaseIcon, CalendarIcon, BuildingOfficeIcon } from "@heroicons/react/24/outline"
+import {
+  BriefcaseIcon,
+  CalendarIcon,
+  BuildingOfficeIcon,
+  CodeBracketIcon,
+  ServerIcon,
+} from "@heroicons/react/24/outline"
+import Background from "../ui/Background"
+import ClientOnly from "../ui/ClientOnly"
 
 // Experience interface
 interface Experience {
@@ -14,6 +22,22 @@ interface Experience {
   description: string[]
   technologies: string[]
   featured: boolean
+}
+
+// Feature Card similar to what's used in other components
+const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) => {
+  return (
+    <motion.div
+      whileHover={{ y: -5 }}
+      className="flex items-start gap-4 p-4 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm"
+    >
+      <div className="p-2 rounded-lg bg-primary/10 text-primary">{icon}</div>
+      <div>
+        <h3 className="font-medium">{title}</h3>
+        <p className="text-sm opacity-70 mt-1">{description}</p>
+      </div>
+    </motion.div>
+  )
 }
 
 // Experience card with hover effects and animations
@@ -167,12 +191,31 @@ const ModernExperience = () => {
   ]
 
   return (
-    <section id="experience" className="py-20 px-6 relative">
-      {/* Background elements */}
-      <div className="absolute top-40 right-10 w-80 h-80 bg-primary/10 rounded-full filter blur-3xl opacity-30 -z-10"></div>
-      <div className="absolute bottom-40 left-10 w-80 h-80 bg-accent/10 rounded-full filter blur-3xl opacity-20 -z-10"></div>
+    <section
+      id="experience"
+      className="relative min-h-screen w-full flex flex-col justify-center py-20 overflow-hidden"
+    >
+      {/* Animated Gradient Background */}
+      <ClientOnly showTransition={true}>
+        <Background
+          Breathing={true}
+          startingGap={120}
+          breathingRange={15}
+          animationSpeed={0.015}
+          gradientColors={[
+            "rgba(10, 10, 10, 1)",
+            "rgba(41, 121, 255, 0.3)", // Primary blue that matches the existing theme
+            "rgba(118, 69, 217, 0.25)", // Purple accent
+            "rgba(255, 109, 0, 0.2)",
+            "rgba(0, 230, 118, 0.15)",
+            "rgba(61, 90, 254, 0.2)",
+          ]}
+          gradientStops={[20, 40, 55, 70, 85, 100]}
+          topOffset={10}
+        />
+      </ClientOnly>
 
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
         {/* Section header */}
         <motion.div
           className="text-center mb-16"
@@ -181,17 +224,30 @@ const ModernExperience = () => {
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
         >
-          <div className="inline-block px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-4">
-            <span className="text-primary text-sm font-medium">Professional Journey</span>
-          </div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">Work Experience</h2>
-          <p className="max-w-2xl mx-auto opacity-70">
+          {/* Badge */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+            className="inline-block px-3 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-4"
+          >
+            <div className="flex items-center gap-2">
+              <span className="inline-block w-2.5 h-2.5 rounded-full bg-gradient-to-r from-primary to-accent animate-pulse"></span>
+              <span className="text-primary text-sm font-medium">Professional Journey</span>
+            </div>
+          </motion.div>
+
+          {/* Heading with gradient text */}
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-2">
+            Work <span className="text-gradient bg-gradient-to-r from-primary via-accent to-secondary">Experience</span>
+          </h2>
+          <p className="max-w-2xl mx-auto opacity-70 mt-4">
             My professional journey as a backend developer, building scalable systems and leading teams to deliver
             high-performance solutions.
           </p>
         </motion.div>
 
-        {/* Featured stats */}
+        {/* Feature cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           <motion.div
             className="p-6 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm"
@@ -246,11 +302,79 @@ const ModernExperience = () => {
           ))}
         </div>
 
+        {/* Technical features section inspired by ModernGradientSection */}
+        <motion.div
+          className="mt-16"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <h3 className="text-2xl font-bold mb-6">Technical Expertise</h3>
+
+          {/* Feature cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+            <FeatureCard
+              icon={<ServerIcon className="w-5 h-5" />}
+              title="Backend Architecture"
+              description="Designing scalable and maintainable backend systems with microservice architecture"
+            />
+            <FeatureCard
+              icon={<CodeBracketIcon className="w-5 h-5" />}
+              title="API Development"
+              description="Creating robust, secure and efficient APIs for frontend applications"
+            />
+            <FeatureCard
+              icon={<div className="flex items-center justify-center w-5 h-5">🚀</div>}
+              title="DevOps & CI/CD"
+              description="Implementing automated workflows for testing, building and deployment"
+            />
+          </div>
+        </motion.div>
+
+        {/* Code snippet with gradient background */}
+        <motion.div
+          className="mt-12 relative overflow-hidden rounded-xl border border-white/10 backdrop-blur-sm"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.6 }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5"></div>
+          <div className="p-6">
+            <div className="mb-4 flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-red-500"></div>
+              <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+              <div className="w-3 h-3 rounded-full bg-green-500"></div>
+              <span className="ml-2 text-xs text-white/70 font-mono">backend-architecture.js</span>
+            </div>
+            <pre className="text-sm text-gray-300 font-mono overflow-x-auto p-4 bg-black/50 rounded-lg">
+              <code>{`// Sample microservice architecture
+const ServiceRegistry = {
+  register: (service) => {
+    console.log(\`Registering service: \${service.name}\`);
+    // Implementation details...
+  },
+  
+  discover: (serviceName) => {
+    // Service discovery logic...
+    return { host: 'api.example.com', port: 8080 };
+  }
+};
+
+// Usage in application
+ServiceRegistry.register({
+  name: 'user-service',
+  version: '1.0.0',
+  endpoints: ['/users', '/auth'],
+});`}</code>
+            </pre>
+          </div>
+        </motion.div>
+
         {/* Download resume button */}
         <div className="mt-12 text-center">
           <motion.a
             href="#"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gradient-to-r from-primary to-accent text-white hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >

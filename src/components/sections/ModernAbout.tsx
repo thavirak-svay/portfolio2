@@ -6,6 +6,7 @@ import { DocumentTextIcon, RocketLaunchIcon, UserGroupIcon } from "@heroicons/re
 import Image from "next/image"
 import ClientOnly from "../ui/ClientOnly"
 import { CanvasRevealEffect } from "../ui/canvas-reveal-effect"
+import { RetroGrid } from "@/components/ui/retro-grid"
 
 // Modern 3D card component with Canvas Reveal Effect
 type ColorScheme = "default" | "blue" | "pink"
@@ -136,7 +137,7 @@ const ModernAbout = () => {
   const imageY = useTransform(scrollYProgress, [0, 1], [-50, 50])
 
   return (
-    <section ref={containerRef} id="about" className="py-20 px-6 relative">
+    <section ref={containerRef} id="about" className="py-20 px-6 relative overflow-hidden">
       {/* Background elements */}
       <ClientOnly>
         <FloatingElements />
@@ -144,10 +145,15 @@ const ModernAbout = () => {
       <div className="absolute top-1/3 left-0 w-72 h-72 rounded-full bg-primary/20 filter blur-3xl opacity-30 -z-10"></div>
       <div className="absolute bottom-1/3 right-0 w-72 h-72 rounded-full bg-accent/20 filter blur-3xl opacity-30 -z-10"></div>
 
-      <div className="max-w-7xl mx-auto">
+      {/* RetroGrid for top 1/3 of section only */}
+      <div className="absolute inset-x-0 top-0 h-1/3 z-0 overflow-hidden">
+        <RetroGrid className="opacity-70" />
+      </div>
+
+      <div className="max-w-7xl mx-auto relative z-10">
         {/* Section header */}
         <motion.div
-          className="text-center mb-16"
+          className="text-center mt-8 mb-36 relative"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}

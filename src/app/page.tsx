@@ -6,7 +6,6 @@ import ModernSkills from "@/components/sections/ModernSkills"
 import ModernProjects from "@/components/sections/ModernProjects"
 import ModernExperience from "@/components/sections/ModernExperience"
 import ModernContact from "@/components/sections/ModernContact"
-import ModernGradientSection from "@/components/sections/ModernGradientSection"
 import ModernFooter from "@/components/ui/ModernFooter"
 import MinimalNavbar from "@/components/ui/MinimalNavbar"
 
@@ -19,7 +18,6 @@ export default function Home() {
       <ModernSkills />
       <ModernProjects />
       <ModernExperience />
-      <ModernGradientSection />
       <ModernContact />
       <ModernFooter />
     </div>

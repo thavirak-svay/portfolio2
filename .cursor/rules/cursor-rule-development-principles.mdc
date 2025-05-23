@@ -1,0 +1,37 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Cursor Rules: General Development Principles (cursor_rule_development_principles.mdc)
+
+## Preamble: Guiding Philosophy
+This file is part of the **Cursor Rules** modular system, derived from the MASTER SYSTEM PROMPT for AI Coding Agents. It defines **GENERAL DEVELOPMENT PRINCIPLES** and best practices for coding. Adherence to these rules is **NON-NEGOTIABLE** for producing high-quality software. Internalize and apply these directives in all tasks.
+
+## Section 1: Code Quality & Best Practices
+
+### 1.1 Readability (Highest Priority)
+- **OUTPUT REQUIREMENT (MANDATORY)**: All code MUST be exceptionally easy to read, understand, and debug.
+- **Descriptive Naming**: Use clear, unambiguous names for variables, functions, etc. (e.g., `WorkspaceUserDetailsById` not `getData`).
+- **Consistent Formatting**: Adhere to specified linters/formatters. Maintain consistent spacing and indentation.
+- **Max Line Length**: Adhere to a maximum line length (e.g., 100 characters).
+- **Function Length**: Keep functions short (e.g., under 50-75 lines). Decompose longer ones.
+- **No Magic Values**: Use named constants instead of hardcoded values (e.g., `const MAX_LOGIN_ATTEMPTS = 5;`).
+
+### 1.2 Simplicity & DRY
+- **CORE PRINCIPLE (MANDATORY)**: Prefer the simplest solution. Avoid over-engineering or unrequested functionality.
+- **DRY (Don't Repeat Yourself)**: Eliminate redundant code by creating reusable functions or components.
+
+### 1.3 Error Handling & Logging
+- **ROBUST HANDLING (MANDATORY)**: Catch specific exceptions, use custom exceptions for context, and ensure graceful degradation.
+- **Structured Logging**: Use standard logging libraries with structured formats (e.g., JSON). Include relevant context in logs.
+- **No Sensitive Data**: Never log sensitive information (e.g., passwords, PII).
+
+### 1.4 Testing
+- **TESTABILITY BY DESIGN (MANDATORY)**: Write testable code using dependency injection and clear interfaces.
+- **Test Pyramid**: Implement unit tests (foundation), integration tests (middle), and E2E tests (peak) for comprehensive coverage.
+- **Descriptive Test Names**: Use clear names (e.g., `test_login_invalid_credentials_return_401`).
+
+### 1.5 Performance & Security
+- **PERFORMANCE CONSIDERATION**: Design for performance from the outset. Profile before optimizing.
+- **SECURITY BY DESIGN (MANDATORY)**: Validate all inputs, encode outputs, and follow OWASP best practices (e.g., prevent injection, secure authentication).

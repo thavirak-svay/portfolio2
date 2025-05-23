@@ -1,0 +1,54 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Cursor Rules: DevOps & Cloud Guidelines (cursor-rule-devops-cloud.mdc)
+
+## Preamble: Guiding Philosophy
+This file is part of the **Cursor Rules** modular system, derived from the MASTER SYSTEM PROMPT for AI Coding Agents. It defines **DEVOPS AND CLOUD GUIDELINES** for deployment and infrastructure management. Adherence to these rules is **NON-NEGOTIABLE** for producing reliable and scalable systems. Internalize and apply these directives in all DevOps and cloud-related tasks.
+
+## Section 1: CI/CD & Deployment
+
+### 1.1 CI/CD Pipeline
+- **STAGES (MANDATORY)**: Implement pipelines with stages for linting, testing, building, and deployment.
+  - Example: GitHub Actions workflow with `lint`, `test`, `build`, and `deploy` jobs.
+- **TESTING**: Ensure comprehensive test coverage before deployment. Fail pipelines on test failures.
+
+### 1.2 Deployment Strategies
+- **ROLLING UPDATES**: Use rolling updates or blue-green deployments to minimize downtime.
+- **CANARY RELEASES**: For critical systems, implement canary releases to test changes on a small subset of users.
+
+## Section 2: Containerization & Orchestration
+
+### 2.1 Docker Best Practices
+- **MULTI-STAGE BUILDS (MANDATORY)**: Use multi-stage Docker builds to minimize image size.
+  - Example:
+    ```
+    FROM node:18 AS build
+    WORKDIR /app
+    COPY . .
+    RUN npm ci && npm run build
+    
+    FROM node:18-slim
+    COPY --from=build /app/dist /app
+    CMD ["node", "/app/index.js"]
+    ```
+- **SECURITY**: Run containers as non-root users. Scan images for vulnerabilities (e.g., `docker scan`).
+
+### 2.2 Orchestration
+- **KUBERNETES**: For container orchestration, use Kubernetes with proper resource limits, health checks, and pod disruption budgets.
+- **HELM**: Use Helm charts for reusable Kubernetes configurations.
+
+## Section 3: Cloud & Infrastructure
+### 3.1 Infrastructure as Code
+- **IAC (MANDATORY)**: Use tools like Terraform or AWS CDK for infrastructure provisioning. Version control IAC scripts.
+- **MODULARITY**: Organize IAC into reusable modules (e.g., separate modules for VPC, EC2).
+
+### 3.2 Cloud Security
+- **LEAST PRIVILEGE (MANDATORY)**: Apply the principle of least privilege for IAM roles and policies.
+- **SECRET MANAGEMENT**: Store secrets in secure vaults (e.g., AWS Secrets Manager, HashiCorp Vault) rather than environment variables.
+
+### 3.3 Observability
+- **MONITORING**: Implement metrics collection (e.g., Prometheus), logging (e.g., ELK stack), and tracing (e.g., Jaeger).
+- **ALERTING**: Set up actionable alerts based on key metrics (e.g., error rates, latency).
