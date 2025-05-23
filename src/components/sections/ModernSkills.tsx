@@ -20,9 +20,9 @@ import {
   Network,
   Cable,
 } from "lucide-react"
-import { GlowingEffect } from "@/components/ui/glowing-effect"
-import DotPattern from "@/components/ui/dot-pattern-1"
-import { RetroGrid } from "@/components/ui/retro-grid"
+import { GlowingEffect } from "@/components/ui/GlowingEffect"
+import DotPattern from "@/components/ui/DotPattern1"
+import { RetroGrid } from "@/components/ui/RetroGrid"
 
 // Skill card with progress indicator
 const SkillCard = ({

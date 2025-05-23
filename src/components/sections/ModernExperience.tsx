@@ -2,15 +2,8 @@
 
 import React, { useState } from "react"
 import { motion } from "framer-motion"
-import {
-  BriefcaseIcon,
-  CalendarIcon,
-  BuildingOfficeIcon,
-  CodeBracketIcon,
-  ServerIcon,
-} from "@heroicons/react/24/outline"
+import { CalendarIcon, BuildingOfficeIcon } from "@heroicons/react/24/outline"
 import Background from "../ui/Background"
-import ClientOnly from "../ui/ClientOnly"
 
 // Experience interface
 interface Experience {
@@ -29,12 +22,12 @@ const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode; titl
   return (
     <motion.div
       whileHover={{ y: -5 }}
-      className="flex items-start gap-4 p-4 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm"
+      className="flex items-start gap-4 p-5 rounded-xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent backdrop-blur-sm h-full shadow-sm shadow-primary/5"
     >
-      <div className="p-2 rounded-lg bg-primary/10 text-primary">{icon}</div>
-      <div>
-        <h3 className="font-medium">{title}</h3>
-        <p className="text-sm opacity-70 mt-1">{description}</p>
+      <div className="p-2.5 rounded-lg bg-primary/10 text-primary flex-shrink-0">{icon}</div>
+      <div className="flex flex-col">
+        <h3 className="font-medium text-white">{title}</h3>
+        <p className="text-sm opacity-70 mt-2">{description}</p>
       </div>
     </motion.div>
   )
@@ -54,9 +47,9 @@ const ExperienceCard = ({
 }) => {
   return (
     <motion.div
-      className={`relative rounded-xl overflow-hidden cursor-pointer transition-all duration-300 ${
+      className={`relative rounded-xl overflow-hidden cursor-pointer transition-all duration-300 h-full ${
         isActive
-          ? "border-2 border-primary shadow-lg shadow-primary/10 bg-white/5"
+          ? "border-2 border-primary shadow-lg shadow-primary/20 bg-gradient-to-br from-white/5 to-white/2"
           : "border border-white/10 bg-white/[0.02] hover:bg-white/5"
       }`}
       initial={{ opacity: 0, y: 20 }}
@@ -64,23 +57,32 @@ const ExperienceCard = ({
       transition={{ duration: 0.5, delay: index * 0.1 }}
       viewport={{ once: true }}
       onClick={onClick}
+      whileHover={!isActive ? { scale: 1.02, y: -5 } : {}}
     >
       {/* Highlight indicator */}
-      <div className={`absolute left-0 top-0 bottom-0 w-1 ${isActive ? "bg-primary" : "bg-white/10"}`} />
+      <div className={`absolute left-0 top-0 bottom-0 w-1.5 ${isActive ? "bg-primary" : "bg-white/10"}`} />
 
-      <div className="p-6">
+      {/* Glowing effect for active state */}
+      {isActive && (
+        <>
+          <div className="absolute inset-0 bg-primary/5 pointer-events-none"></div>
+          <div className="absolute -inset-0.5 bg-primary/20 blur-md opacity-30 -z-10"></div>
+        </>
+      )}
+
+      <div className="p-6 flex flex-col h-full relative z-10">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
           <div>
-            <h3 className="text-lg md:text-xl font-bold text-white">{experience.role}</h3>
-            <div className="flex items-center gap-2 mt-1">
-              <BuildingOfficeIcon className="w-4 h-4 text-primary" />
+            <h3 className="text-xl font-bold text-white">{experience.role}</h3>
+            <div className="flex items-center gap-2 mt-2">
+              <BuildingOfficeIcon className="w-4 h-4 text-primary flex-shrink-0" />
               <span className="text-white/70">{experience.company}</span>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 w-fit">
-            <CalendarIcon className="w-4 h-4 text-primary" />
-            <span className="text-sm text-white/70">{experience.date}</span>
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 w-fit flex-shrink-0">
+            <CalendarIcon className="w-4 h-4 text-primary flex-shrink-0" />
+            <span className="text-sm text-white/70 whitespace-nowrap">{experience.date}</span>
           </div>
         </div>
 
@@ -89,24 +91,24 @@ const ExperienceCard = ({
           initial={{ height: 0, opacity: 0 }}
           animate={{ height: isActive ? "auto" : 0, opacity: isActive ? 1 : 0 }}
           transition={{ duration: 0.3 }}
-          className="overflow-hidden"
+          className="overflow-hidden flex-grow"
         >
           <ul className="space-y-2 mb-4 text-white/70">
             {experience.description.map((item, idx) => (
               <li key={idx} className="flex items-start gap-2">
-                <span className="text-primary mt-1">•</span>
+                <span className="text-primary mt-1 flex-shrink-0">•</span>
                 <span>{item}</span>
               </li>
             ))}
           </ul>
 
-          <div className="mt-4">
-            <p className="text-xs uppercase tracking-wider text-white/50 mb-2">Technologies</p>
+          <div className="mt-4 pb-2">
+            <p className="text-xs uppercase tracking-wider text-white/50 mb-2 font-semibold">Technologies</p>
             <div className="flex flex-wrap gap-2">
               {experience.technologies.map((tech, idx) => (
                 <span
                   key={idx}
-                  className="text-xs px-2 py-1 rounded-full bg-white/[0.03] text-white/70 border border-white/10"
+                  className="text-xs px-2 py-1 rounded-full bg-white/[0.05] text-white/80 border border-white/10 inline-block hover:bg-primary/10 transition-colors"
                 >
                   {tech}
                 </span>
@@ -116,7 +118,14 @@ const ExperienceCard = ({
         </motion.div>
 
         {/* Preview text for inactive cards */}
-        {!isActive && <div className="text-sm text-white/50 mt-2">Click to view details</div>}
+        {!isActive && (
+          <div className="flex items-center gap-2 text-sm text-white/50 mt-auto pt-2">
+            <span className="w-4 h-4 rounded-full bg-primary/20 flex items-center justify-center">
+              <span className="text-primary text-xs">+</span>
+            </span>
+            <span>Click to expand</span>
+          </div>
+        )}
       </div>
     </motion.div>
   )
@@ -196,190 +205,201 @@ const ModernExperience = () => {
       className="relative min-h-screen w-full flex flex-col justify-center py-20 overflow-hidden"
     >
       {/* Animated Gradient Background */}
-      <ClientOnly showTransition={true}>
-        <Background
-          Breathing={true}
-          startingGap={120}
-          breathingRange={15}
-          animationSpeed={0.015}
-          gradientColors={[
-            "rgba(10, 10, 10, 1)",
-            "rgba(41, 121, 255, 0.3)", // Primary blue that matches the existing theme
-            "rgba(118, 69, 217, 0.25)", // Purple accent
-            "rgba(255, 109, 0, 0.2)",
-            "rgba(0, 230, 118, 0.15)",
-            "rgba(61, 90, 254, 0.2)",
-          ]}
-          gradientStops={[20, 40, 55, 70, 85, 100]}
-          topOffset={10}
-        />
-      </ClientOnly>
+      <Background
+        Breathing={true}
+        startingGap={120}
+        breathingRange={15}
+        animationSpeed={0.015}
+        gradientColors={[
+          "rgba(10, 10, 10, 1)",
+          "rgba(41, 121, 255, 0.3)", // Primary blue that matches the existing theme
+          "rgba(118, 69, 217, 0.25)", // Purple accent
+          "rgba(255, 109, 0, 0.2)",
+          "rgba(0, 230, 118, 0.15)",
+          "rgba(61, 90, 254, 0.2)",
+        ]}
+        gradientStops={[20, 40, 55, 70, 85, 100]}
+        topOffset={10}
+      />
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        {/* Section header */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+        {/* Professional Header Section */}
         <motion.div
-          className="text-center mb-16"
+          className="text-center mt-8 mb-36 relative"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
         >
-          {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
-            className="inline-block px-3 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-4"
-          >
-            <div className="flex items-center gap-2">
-              <span className="inline-block w-2.5 h-2.5 rounded-full bg-gradient-to-r from-primary to-accent animate-pulse"></span>
-              <span className="text-primary text-sm font-medium">Professional Journey</span>
-            </div>
-          </motion.div>
-
-          {/* Heading with gradient text */}
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-2">
-            Work <span className="text-gradient bg-gradient-to-r from-primary via-accent to-secondary">Experience</span>
-          </h2>
-          <p className="max-w-2xl mx-auto opacity-70 mt-4">
-            My professional journey as a backend developer, building scalable systems and leading teams to deliver
-            high-performance solutions.
+          <div className="inline-block px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-4">
+            <span className="text-primary text-sm font-medium">Professional Journey</span>
+          </div>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">Work Experience</h2>
+          <p className="max-w-2xl mx-auto opacity-70">
+            My professional journey as a backend developer, architecting scalable systems and leading high-performance
+            engineering teams across multiple industries.
           </p>
         </motion.div>
 
-        {/* Feature cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <motion.div
-            className="p-6 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            viewport={{ once: true }}
-          >
-            <BriefcaseIcon className="w-8 h-8 text-primary mb-4" />
-            <div className="text-3xl font-bold mb-2">7+</div>
-            <h3 className="text-lg font-semibold mb-1">Years Experience</h3>
-            <p className="text-sm opacity-70">Building robust backend systems</p>
-          </motion.div>
+        {/* Professional Experience Section */}
+        <div className="mb-20">
+          <div className="flex items-center gap-4 mb-10 relative">
+            <h3 className="text-2xl font-bold text-white tracking-tight relative z-10 drop-shadow-md">
+              Professional <span className="text-primary">Timeline</span>
+            </h3>
+            <div className="h-px flex-grow bg-white/10"></div>
+            {/* Glow effect */}
+            <div className="absolute -inset-3 bg-primary/20 blur-xl opacity-40 rounded-lg -z-10"></div>
+          </div>
 
-          <motion.div
-            className="p-6 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            viewport={{ once: true }}
-          >
-            <BuildingOfficeIcon className="w-8 h-8 text-primary mb-4" />
-            <div className="text-3xl font-bold mb-2">4</div>
-            <h3 className="text-lg font-semibold mb-1">Companies</h3>
-            <p className="text-sm opacity-70">Across different industries</p>
-          </motion.div>
+          {/* Experience cards in a modern corporate layout */}
+          <div className="grid grid-cols-1 gap-1">
+            {experiences.map((experience, index) => (
+              <motion.div
+                key={experience.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="mb-1"
+              >
+                <div
+                  className={`group rounded-lg overflow-hidden transition-all duration-300 relative ${
+                    activeExperience === experience.id
+                      ? "bg-black/40 border border-white/10"
+                      : "bg-white/[0.02] border border-white/5 hover:bg-black/40"
+                  }`}
+                  onClick={() => setActiveExperience(experience.id)}
+                >
+                  {/* Glow effect for active state */}
+                  {activeExperience === experience.id && (
+                    <>
+                      <div className="absolute -inset-0.5 bg-primary/30 blur-md opacity-50 -z-10"></div>
+                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
+                    </>
+                  )}
+                  <div className="px-8 py-6 cursor-pointer">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                      <div className="flex-grow">
+                        <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-6">
+                          <div className="text-sm font-medium px-3 py-1.5 rounded-full bg-white/5 border border-white/10 w-fit whitespace-nowrap">
+                            {experience.date}
+                          </div>
 
-          <motion.div
-            className="p-6 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            viewport={{ once: true }}
-          >
-            <CalendarIcon className="w-8 h-8 text-primary mb-4" />
-            <div className="text-3xl font-bold mb-2">15+</div>
-            <h3 className="text-lg font-semibold mb-1">Major Projects</h3>
-            <p className="text-sm opacity-70">Successfully delivered on time</p>
-          </motion.div>
+                          <h4
+                            className={`text-xl font-semibold ${
+                              activeExperience === experience.id
+                                ? "text-primary drop-shadow-md shadow-primary"
+                                : "text-white/90"
+                            }`}
+                          >
+                            {experience.role}
+                          </h4>
+                        </div>
+
+                        <div className="flex items-center gap-2 mt-2 text-white/70">
+                          <BuildingOfficeIcon className="w-4 h-4 text-primary flex-shrink-0" />
+                          <span>{experience.company}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center">
+                        {" "}
+                        <div
+                          className={`rounded-full p-2 ${
+                            activeExperience === experience.id
+                              ? "bg-primary/20 text-primary shadow-sm shadow-primary/30"
+                              : "bg-white/5 text-white/50 group-hover:bg-white/10"
+                          }`}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className={`transition-transform ${activeExperience === experience.id ? "rotate-180" : ""}`}
+                          >
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Content area - expands when active */}
+                    <motion.div
+                      initial={false}
+                      animate={{
+                        height: activeExperience === experience.id ? "auto" : 0,
+                        opacity: activeExperience === experience.id ? 1 : 0,
+                        marginTop: activeExperience === experience.id ? "16px" : "0px",
+                      }}
+                      transition={{ duration: 0.3 }}
+                      className="overflow-hidden"
+                    >
+                      <ul className="space-y-3 mb-6 text-white/70 pl-5">
+                        {experience.description.map((item, idx) => (
+                          <li key={idx} className="list-disc list-outside">
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+
+                      <div className="mt-6 pb-2">
+                        <p className="text-xs uppercase tracking-wider text-white/50 mb-3 font-semibold">
+                          Core Technologies
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          {experience.technologies.map((tech, idx) => (
+                            <span
+                              key={idx}
+                              className="px-3 py-1.5 rounded-md bg-white/[0.03] text-white/80 border border-white/10 text-sm hover:bg-primary/10 transition-colors hover:border-primary/30"
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </motion.div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
 
-        {/* Experience cards */}
-        <div className="space-y-6 mt-10">
-          {experiences.map((experience, index) => (
-            <ExperienceCard
-              key={experience.id}
-              experience={experience}
-              index={index}
-              isActive={activeExperience === experience.id}
-              onClick={() => setActiveExperience(experience.id)}
-            />
-          ))}
-        </div>
-
-        {/* Technical features section inspired by ModernGradientSection */}
-        <motion.div
-          className="mt-16"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <h3 className="text-2xl font-bold mb-6">Technical Expertise</h3>
-
-          {/* Feature cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-            <FeatureCard
-              icon={<ServerIcon className="w-5 h-5" />}
-              title="Backend Architecture"
-              description="Designing scalable and maintainable backend systems with microservice architecture"
-            />
-            <FeatureCard
-              icon={<CodeBracketIcon className="w-5 h-5" />}
-              title="API Development"
-              description="Creating robust, secure and efficient APIs for frontend applications"
-            />
-            <FeatureCard
-              icon={<div className="flex items-center justify-center w-5 h-5">🚀</div>}
-              title="DevOps & CI/CD"
-              description="Implementing automated workflows for testing, building and deployment"
-            />
+        {/* Professional Resume Download */}
+        <div className="mt-16 text-center">
+          <div className="max-w-xl mx-auto rounded-xl bg-gradient-to-r from-black/80 to-black/60 backdrop-blur-lg p-6 border border-white/5 shadow-xl">
+            <h3 className="text-xl font-semibold text-white mb-3">Want to know more about my experience?</h3>
+            <p className="text-white/60 mb-6">
+              Download my comprehensive resume for a detailed overview of my skills, experience, and professional
+              achievements.
+            </p>
+            <motion.a
+              href="#"
+              className="inline-flex items-center gap-3 px-8 py-3 rounded-md bg-gradient-to-r from-primary to-accent text-white transition-all shadow-lg shadow-primary/20 border border-white/10"
+              whileHover={{
+                scale: 1.02,
+                boxShadow: "0 20px 25px -5px rgba(75, 192, 255, 0.3), 0 10px 10px -5px rgba(75, 192, 255, 0.2)",
+              }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+              <span className="font-medium">Download Full Resume</span>
+            </motion.a>
           </div>
-        </motion.div>
-
-        {/* Code snippet with gradient background */}
-        <motion.div
-          className="mt-12 relative overflow-hidden rounded-xl border border-white/10 backdrop-blur-sm"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5"></div>
-          <div className="p-6">
-            <div className="mb-4 flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-red-500"></div>
-              <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-              <div className="w-3 h-3 rounded-full bg-green-500"></div>
-              <span className="ml-2 text-xs text-white/70 font-mono">backend-architecture.js</span>
-            </div>
-            <pre className="text-sm text-gray-300 font-mono overflow-x-auto p-4 bg-black/50 rounded-lg">
-              <code>{`// Sample microservice architecture
-const ServiceRegistry = {
-  register: (service) => {
-    console.log(\`Registering service: \${service.name}\`);
-    // Implementation details...
-  },
-  
-  discover: (serviceName) => {
-    // Service discovery logic...
-    return { host: 'api.example.com', port: 8080 };
-  }
-};
-
-// Usage in application
-ServiceRegistry.register({
-  name: 'user-service',
-  version: '1.0.0',
-  endpoints: ['/users', '/auth'],
-});`}</code>
-            </pre>
-          </div>
-        </motion.div>
-
-        {/* Download resume button */}
-        <div className="mt-12 text-center">
-          <motion.a
-            href="#"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gradient-to-r from-primary to-accent text-white hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Download Full Resume
-          </motion.a>
         </div>
       </div>
     </section>

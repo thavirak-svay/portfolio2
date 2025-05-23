@@ -1,12 +1,11 @@
 "use client"
 
-import React, { useRef, useState } from "react"
+import React, { useRef, useState, useEffect } from "react"
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
 import { DocumentTextIcon, RocketLaunchIcon, UserGroupIcon } from "@heroicons/react/24/outline"
 import Image from "next/image"
-import ClientOnly from "../ui/ClientOnly"
-import { CanvasRevealEffect } from "../ui/canvas-reveal-effect"
-import { RetroGrid } from "@/components/ui/retro-grid"
+import { CanvasRevealEffect } from "../ui/CanvasRevealEffect"
+import { RetroGrid } from "@/components/ui/RetroGrid"
 
 // Modern 3D card component with Canvas Reveal Effect
 type ColorScheme = "default" | "blue" | "pink"
@@ -139,9 +138,7 @@ const ModernAbout = () => {
   return (
     <section ref={containerRef} id="about" className="py-20 px-6 relative overflow-hidden">
       {/* Background elements */}
-      <ClientOnly>
-        <FloatingElements />
-      </ClientOnly>
+      <FloatingElements />
       <div className="absolute top-1/3 left-0 w-72 h-72 rounded-full bg-primary/20 filter blur-3xl opacity-30 -z-10"></div>
       <div className="absolute bottom-1/3 right-0 w-72 h-72 rounded-full bg-accent/20 filter blur-3xl opacity-30 -z-10"></div>
 
@@ -196,42 +193,6 @@ const ModernAbout = () => {
               approach combines technical expertise with a deep understanding of business requirements to deliver
               solutions that not only work flawlessly but also provide long-term value.
             </motion.p>
-
-            {/* Stats */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
-              <motion.div
-                className="p-4 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm text-center"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                viewport={{ once: true }}
-              >
-                <div className="text-2xl font-bold text-primary">7+</div>
-                <div className="text-sm opacity-70">Years Experience</div>
-              </motion.div>
-
-              <motion.div
-                className="p-4 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm text-center"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-                viewport={{ once: true }}
-              >
-                <div className="text-2xl font-bold text-accent">30+</div>
-                <div className="text-sm opacity-70">Projects Completed</div>
-              </motion.div>
-
-              <motion.div
-                className="p-4 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm text-center"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.4 }}
-                viewport={{ once: true }}
-              >
-                <div className="text-2xl font-bold text-secondary">15+</div>
-                <div className="text-sm opacity-70">Happy Clients</div>
-              </motion.div>
-            </div>
           </div>
 
           {/* Right side - image with parallax */}

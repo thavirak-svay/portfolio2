@@ -4,7 +4,6 @@ import React from "react"
 import { motion } from "framer-motion"
 import { TypeAnimation } from "react-type-animation"
 import { ArrowDownIcon, CommandLineIcon, CodeBracketIcon, ServerIcon } from "@heroicons/react/24/outline"
-import ClientOnly from "../ui/ClientOnly"
 import Background from "../ui/Background"
 
 // 3D Code Block Component
@@ -93,24 +92,22 @@ const ModernHero = () => {
       className="relative min-h-screen w-full flex flex-col justify-center pt-20 pb-10 px-6 overflow-hidden"
     >
       {/* Background effects */}
-      <ClientOnly showTransition={true}>
-        <Background
-          Breathing={true}
-          startingGap={140}
-          breathingRange={10}
-          animationSpeed={0.01}
-          gradientColors={[
-            "rgba(10, 10, 10, 1)",
-            "rgba(41, 121, 255, 0.2)", // Primary blue
-            "rgba(118, 69, 217, 0.2)", // Purple accent
-            "rgba(22, 163, 74, 0.1)", // Green secondary
-            "rgba(61, 90, 254, 0.15)",
-          ]}
-          gradientStops={[20, 40, 65, 85, 100]}
-          topOffset={10}
-          containerClassName="opacity-90"
-        />
-      </ClientOnly>
+      <Background
+        Breathing={true}
+        startingGap={140}
+        breathingRange={10}
+        animationSpeed={0.01}
+        gradientColors={[
+          "rgba(10, 10, 10, 1)",
+          "rgba(41, 121, 255, 0.2)", // Primary blue
+          "rgba(118, 69, 217, 0.2)", // Purple accent
+          "rgba(22, 163, 74, 0.1)", // Green secondary
+          "rgba(61, 90, 254, 0.15)",
+        ]}
+        gradientStops={[20, 40, 65, 85, 100]}
+        topOffset={10}
+        containerClassName="opacity-90"
+      />
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
         <motion.div

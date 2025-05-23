@@ -4,8 +4,8 @@ import React, { useState } from "react"
 import { motion } from "framer-motion"
 import { GlobeAltIcon, CodeBracketIcon, ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline"
 import Image from "next/image"
-import DatabaseWithRestApi from "../ui/database-with-rest-api"
-import { RetroGrid } from "@/components/ui/retro-grid"
+import DatabaseWithRestApi from "../ui/DatabaseWithRestApi"
+import { RetroGrid } from "@/components/ui/RetroGrid"
 
 // Project types
 type ProjectCategory = "All" | "API" | "Microservice" | "Database" | "DevOps"
