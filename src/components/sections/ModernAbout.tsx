@@ -7,10 +7,29 @@ import Image from "next/image"
 import { CanvasRevealEffect } from "../ui/CanvasRevealEffect"
 import { RetroGrid } from "@/components/ui/RetroGrid"
 
+// Define colorConfig outside the component
+const cardColorConfig = {
+  default: {
+    effectColors: [[0, 255, 255]], // Default cyan
+    glowClasses: "from-cyan-500 to-cyan-400",
+  },
+  blue: {
+    effectColors: [[125, 211, 252]], // Light blue
+    glowClasses: "from-blue-500 to-blue-400",
+  },
+  pink: {
+    effectColors: [
+      [236, 72, 153], // Pink
+      [232, 121, 249], // Fuchsia
+    ],
+    glowClasses: "from-pink-500 to-fuchsia-400",
+  },
+}
+
 // Modern 3D card component with Canvas Reveal Effect
 type ColorScheme = "default" | "blue" | "pink"
 
-const Card3D = ({
+const Card3DComponent = ({
   icon,
   title,
   description,
@@ -24,25 +43,7 @@ const Card3D = ({
   const [isHovered, setIsHovered] = useState(false)
 
   // Color configurations based on colorScheme
-  const colorConfig = {
-    default: {
-      effectColors: [[0, 255, 255]], // Default cyan
-      glowClasses: "from-cyan-500 to-cyan-400",
-    },
-    blue: {
-      effectColors: [[125, 211, 252]], // Light blue
-      glowClasses: "from-blue-500 to-blue-400",
-    },
-    pink: {
-      effectColors: [
-        [236, 72, 153], // Pink
-        [232, 121, 249], // Fuchsia
-      ],
-      glowClasses: "from-pink-500 to-fuchsia-400",
-    },
-  }
-
-  const { effectColors, glowClasses } = colorConfig[colorScheme]
+  const { effectColors, glowClasses } = cardColorConfig[colorScheme]
 
   return (
     <motion.div
@@ -90,8 +91,10 @@ const Card3D = ({
   )
 }
 
+const Card3D = React.memo(Card3DComponent)
+
 // Floating elements for background
-const FloatingElements = () => {
+const FloatingElementsComponent = () => {
   const [elements, setElements] = React.useState<React.ReactNode[]>([])
 
   // Generate elements only on the client side after component mounts
@@ -125,7 +128,9 @@ const FloatingElements = () => {
   return <div className="absolute inset-0 overflow-hidden -z-10 opacity-40">{elements}</div>
 }
 
-const ModernAbout = () => {
+const FloatingElements = React.memo(FloatingElementsComponent)
+
+const ModernAboutComponent = () => {
   const containerRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -264,4 +269,4 @@ const createServer = async () => {
   )
 }
 
-export default ModernAbout
+export default React.memo(ModernAboutComponent)

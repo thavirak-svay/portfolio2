@@ -209,7 +209,7 @@ const DatabaseWithRestApi = ({
   )
 }
 
-export default DatabaseWithRestApi
+export default React.memo(DatabaseWithRestApi)
 
 const DatabaseIcon = ({ x = "0", y = "0" }: { x: string; y: string }) => {
   return (

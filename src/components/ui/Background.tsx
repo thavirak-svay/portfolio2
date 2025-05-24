@@ -151,4 +151,4 @@ const Background: React.FC<BackgroundProps> = ({
   )
 }
 
-export default Background
+export default React.memo(Background)

@@ -1,10 +1,25 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { Home, User, FolderOpen, Award, Mail } from "lucide-react"
+
+// Debounce utility function
+function debounce<F extends (...args: any[]) => any>(func: F, waitFor: number) {
+  let timeout: NodeJS.Timeout | null = null
+
+  const debounced = (...args: Parameters<F>) => {
+    if (timeout !== null) {
+      clearTimeout(timeout)
+      timeout = null
+    }
+    timeout = setTimeout(() => func(...args), waitFor)
+  }
+
+  return debounced as (...args: Parameters<F>) => ReturnType<F>
+}
 
 // Define navigation items - keep it minimal with icons
 const navItems = [
@@ -15,7 +30,7 @@ const navItems = [
   { name: "Contact", url: "#contact", mobilePriority: true, icon: Mail },
 ]
 
-export default function MinimalNavbar() {
+const MinimalNavbarComponent = () => {
   const [mounted, setMounted] = useState(false)
   const [activeSection, setActiveSection] = useState("Home")
   const [isMobile, setIsMobile] = useState(false)
@@ -28,11 +43,9 @@ export default function MinimalNavbar() {
     setMounted(true)
   }, [])
 
-  // Handle scroll detection for active section
-  useEffect(() => {
-    if (!mounted) return
-
-    const handleScroll = () => {
+  // Memoized and debounced scroll handlers
+  const debouncedHandleScroll = useCallback(
+    debounce(() => {
       const sections = ["hero", "about", "projects", "experience", "contact"]
       const scrollPosition = window.scrollY + 200
 
@@ -59,75 +72,69 @@ export default function MinimalNavbar() {
           break
         }
       }
-    }
+    }, 150), // Debounce time of 150ms
+    [activeSection] // Dependency: activeSection
+  )
 
-    window.addEventListener("scroll", handleScroll)
-    return () => {
-      window.removeEventListener("scroll", handleScroll)
-    }
-  }, [activeSection, mounted])
-
-  // Handle scroll behavior - hide on scroll down, show on scroll up
-  useEffect(() => {
-    if (!mounted) return
-
-    let scrollTimer: NodeJS.Timeout | null = null
-
-    const controlNavbar = () => {
+  const debouncedControlNavbar = useCallback(
+    debounce(() => {
       const currentScrollY = window.scrollY
 
-      // Check if user has scrolled
       if (currentScrollY > 30 && !hasScrolled) {
         setHasScrolled(true)
       } else if (currentScrollY < 10 && hasScrolled) {
         setHasScrolled(false)
       }
 
-      // Enhanced hide/show logic with threshold
       const scrollDiff = Math.abs(currentScrollY - lastScrollY)
       const scrollThreshold = 5
 
-      // Clear any existing timers to prevent flicker
-      if (scrollTimer) {
-        clearTimeout(scrollTimer)
+      if (currentScrollY > lastScrollY && currentScrollY > 50 && scrollDiff > scrollThreshold) {
+        setIsVisible(false)
+      } else if ((currentScrollY < lastScrollY && scrollDiff > scrollThreshold) || currentScrollY < 20) {
+        setIsVisible(true)
       }
+      setLastScrollY(currentScrollY) // Update lastScrollY directly without timeout for accurate diff next time
+    }, 50), // Debounce time of 50ms, slightly shorter than original timeout for responsiveness
+    [lastScrollY, hasScrolled] // Dependencies: lastScrollY, hasScrolled
+  )
 
-      // Use a small delay to stabilize hide/show behavior
-      scrollTimer = setTimeout(() => {
-        if (currentScrollY > lastScrollY && currentScrollY > 50 && scrollDiff > scrollThreshold) {
-          // Scrolling down - hide navbar completely
-          setIsVisible(false)
-        } else if ((currentScrollY < lastScrollY && scrollDiff > scrollThreshold) || currentScrollY < 20) {
-          // Scrolling up or at top - show navbar
-          setIsVisible(true)
-        }
-      }, 50) // Small delay to stabilize behavior
-
-      setLastScrollY(currentScrollY)
-    }
-
-    window.addEventListener("scroll", controlNavbar, { passive: true })
-    return () => {
-      window.removeEventListener("scroll", controlNavbar)
-      // Clean up any pending timer on unmount
-      if (scrollTimer) {
-        clearTimeout(scrollTimer)
-      }
-    }
-  }, [lastScrollY, mounted, hasScrolled])
-
-  // Handle resize events
+  // Handle scroll detection for active section
   useEffect(() => {
     if (!mounted) return
 
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768)
+    window.addEventListener("scroll", debouncedHandleScroll)
+    return () => {
+      window.removeEventListener("scroll", debouncedHandleScroll)
     }
+  }, [mounted, debouncedHandleScroll])
 
-    handleResize()
+  // Handle scroll behavior - hide on scroll down, show on scroll up
+  useEffect(() => {
+    if (!mounted) return
+
+    // The original scrollTimer logic is now effectively handled by the debounce in debouncedControlNavbar
+    // and the direct setLastScrollY update within it.
+
+    window.addEventListener("scroll", debouncedControlNavbar, { passive: true })
+    return () => {
+      window.removeEventListener("scroll", debouncedControlNavbar)
+      // No need to clear scrollTimer here as debounce handles its own timer.
+    }
+  }, [mounted, debouncedControlNavbar])
+
+  // Handle resize events
+  const handleResize = useCallback(() => {
+    setIsMobile(window.innerWidth < 768)
+  }, []) // No dependencies, will be created once
+
+  useEffect(() => {
+    if (!mounted) return
+
+    handleResize() // Call once on mount
     window.addEventListener("resize", handleResize)
     return () => window.removeEventListener("resize", handleResize)
-  }, [mounted])
+  }, [mounted, handleResize])
 
   // Don't render anything during SSR to prevent hydration mismatch
   if (!mounted) return null
@@ -227,3 +234,5 @@ export default function MinimalNavbar() {
     </div>
   )
 }
+
+export default React.memo(MinimalNavbarComponent)

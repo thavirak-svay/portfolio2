@@ -6,8 +6,21 @@ import { TypeAnimation } from "react-type-animation"
 import { ArrowDownIcon, CommandLineIcon, CodeBracketIcon, ServerIcon } from "@heroicons/react/24/outline"
 import Background from "../ui/Background"
 
+// Define these outside the component so they are not recreated on every render
+const heroGradientColors = [
+  "rgba(10, 10, 10, 1)",
+  "rgba(41, 121, 255, 0.2)", // Primary blue
+  "rgba(118, 69, 217, 0.2)", // Purple accent
+  "rgba(22, 163, 74, 0.1)", // Green secondary
+  "rgba(61, 90, 254, 0.15)",
+]
+const heroGradientStops = [20, 40, 65, 85, 100]
+
+// Define tech stack array outside the component
+const techStack = ["TypeScript", "Python", "Node.js", "PostgreSQL", "MongoDB", "Redis", "Docker", "AWS"]
+
 // 3D Code Block Component
-const CodeBlock3D = () => {
+const CodeBlock3DComponent = () => {
   return (
     <div className="relative perspective-1000 w-full h-full">
       <div className="relative transform-gpu rotate-y-6 rotate-x-12 transition-transform duration-500 hover:rotate-y-0 hover:rotate-x-0">
@@ -67,9 +80,18 @@ const CodeBlock3D = () => {
     </div>
   )
 }
+const CodeBlock3D = React.memo(CodeBlock3DComponent)
 
 // Feature Card
-const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) => {
+const FeatureCardComponent = ({
+  icon,
+  title,
+  description,
+}: {
+  icon: React.ReactNode
+  title: string
+  description: string
+}) => {
   return (
     <motion.div
       whileHover={{ y: -5 }}
@@ -83,9 +105,10 @@ const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode; titl
     </motion.div>
   )
 }
+const FeatureCard = React.memo(FeatureCardComponent)
 
 // Main Hero Component
-const ModernHero = () => {
+const ModernHeroComponent = () => {
   return (
     <section
       id="hero"
@@ -97,14 +120,8 @@ const ModernHero = () => {
         startingGap={140}
         breathingRange={10}
         animationSpeed={0.01}
-        gradientColors={[
-          "rgba(10, 10, 10, 1)",
-          "rgba(41, 121, 255, 0.2)", // Primary blue
-          "rgba(118, 69, 217, 0.2)", // Purple accent
-          "rgba(22, 163, 74, 0.1)", // Green secondary
-          "rgba(61, 90, 254, 0.15)",
-        ]}
-        gradientStops={[20, 40, 65, 85, 100]}
+        gradientColors={heroGradientColors}
+        gradientStops={heroGradientStops}
         topOffset={10}
         containerClassName="opacity-90"
       />
@@ -234,20 +251,18 @@ const ModernHero = () => {
           <div className="mt-6">
             <p className="text-xs uppercase tracking-wider opacity-60 mb-2">Tech Stack</p>
             <div className="flex flex-wrap gap-2">
-              {["TypeScript", "Python", "Node.js", "PostgreSQL", "MongoDB", "Redis", "Docker", "AWS"].map(
-                (tech, index) => (
-                  <motion.span
-                    key={index}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.4 + index * 0.1, duration: 0.3 }}
-                    whileHover={{ y: -2, scale: 1.05 }}
-                    className="text-xs px-3 py-1.5 rounded-md border border-white/10 bg-white/5 backdrop-blur-sm"
-                  >
-                    {tech}
-                  </motion.span>
-                )
-              )}
+              {techStack.map((tech, index) => (
+                <motion.span
+                  key={index}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.4 + index * 0.1, duration: 0.3 }}
+                  whileHover={{ y: -2, scale: 1.05 }}
+                  className="text-xs px-3 py-1.5 rounded-md border border-white/10 bg-white/5 backdrop-blur-sm"
+                >
+                  {tech}
+                </motion.span>
+              ))}
             </div>
           </div>
         </motion.div>
@@ -356,4 +371,4 @@ const ModernHero = () => {
   )
 }
 
-export default ModernHero
+export default React.memo(ModernHeroComponent)

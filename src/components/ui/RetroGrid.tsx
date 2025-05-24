@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils"
+import React from "react"
 
-export function RetroGrid({ className, angle = 65 }: { className?: string; angle?: number }) {
+export const RetroGridComponent = ({ className, angle = 65 }: { className?: string; angle?: number }) => {
   return (
     <div
       className={cn("pointer-events-none absolute size-full overflow-hidden opacity-50 [perspective:200px]", className)}
@@ -28,3 +29,5 @@ export function RetroGrid({ className, angle = 65 }: { className?: string; angle
     </div>
   )
 }
+
+export const RetroGrid = React.memo(RetroGridComponent)

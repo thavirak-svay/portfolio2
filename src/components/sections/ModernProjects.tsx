@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, useMemo } from "react"
 import { motion } from "framer-motion"
 import { GlobeAltIcon, CodeBracketIcon, ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline"
 import Image from "next/image"
@@ -22,8 +22,113 @@ interface Project {
   featured: boolean
 }
 
+// Sample projects data - defined outside the component
+const allProjectsData: Project[] = [
+  {
+    id: 0, // Special API showcase project
+    title: "Advanced RESTful API Platform",
+    description:
+      "A comprehensive RESTful API platform with robust authentication, rate limiting, data validation, and extensive documentation. This platform serves as the backbone for multiple client applications with different access patterns and security requirements. Features include JWT-based authentication, role-based access control, request validation, thorough error handling, and comprehensive logging.",
+    image: "/projects/api.jpg",
+    tags: ["Node.js", "Express", "TypeScript", "MongoDB", "Redis", "JWT", "Swagger", "Docker"],
+    category: ["API", "Database"],
+    githubUrl: "#",
+    liveUrl: "#",
+    featured: true,
+  },
+  {
+    id: 1,
+    title: "E-Commerce Microservices API",
+    description:
+      "Developed a suite of microservices for an e-commerce platform, handling product catalog, user accounts, orders, and payments. Focused on high availability and fault tolerance.",
+    image: "/projects/api.jpg",
+    tags: ["Node.js", "TypeScript", "Microservices", "RabbitMQ", "PostgreSQL", "Docker", "Kubernetes"],
+    category: ["API", "Microservice"],
+    githubUrl: "#",
+    liveUrl: "#",
+    featured: true,
+  },
+  {
+    id: 2,
+    title: "Real-time Analytics Dashboard",
+    description:
+      "Built a backend system to process and display real-time analytics data using WebSockets and a time-series database. Optimized for high-volume data ingestion and low-latency querying.",
+    image: "/projects/analytics.jpg",
+    tags: ["Python", "FastAPI", "WebSockets", "InfluxDB", "Redis", "Grafana"],
+    category: ["API", "Database"],
+    githubUrl: "#",
+    featured: false,
+  },
+  {
+    id: 3,
+    title: "Headless CMS Backend",
+    description:
+      "Created a flexible and scalable backend for a headless CMS, allowing content creators to manage and distribute content across multiple channels via a robust API.",
+    image: "/projects/database.jpg",
+    tags: ["Node.js", "NestJS", "GraphQL", "PostgreSQL", "Elasticsearch", "AWS S3"],
+    category: ["API", "Database"],
+    githubUrl: "#",
+    liveUrl: "#",
+    featured: false,
+  },
+  {
+    id: 4,
+    title: "Cloud Infrastructure Orchestration",
+    description:
+      "Designed and implemented automated infrastructure provisioning and deployment pipelines using Terraform and Ansible on AWS. Managed scalable and resilient cloud environments.",
+    image: "/projects/cicd.jpg",
+    tags: ["Terraform", "Ansible", "AWS", "Docker", "Kubernetes", "CI/CD"],
+    category: ["DevOps"],
+    githubUrl: "#",
+    featured: true,
+  },
+  {
+    id: 5,
+    title: "Distributed Caching System",
+    description:
+      "Implemented a distributed caching layer using Redis to improve application performance and reduce database load for frequently accessed data.",
+    image: "/projects/database.jpg",
+    tags: ["Redis", "Node.js", "Cache Invalidation", "Data Consistency"],
+    category: ["Database", "API"],
+    githubUrl: "#",
+    featured: false,
+  },
+  {
+    id: 6,
+    title: "IoT Data Ingestion Pipeline",
+    description:
+      "Developed a scalable data ingestion pipeline for IoT devices using Kafka and Go, capable of handling millions of messages per second.",
+    image: "/projects/api.jpg",
+    tags: ["Go", "Kafka", "IoT", "Data Engineering", "TimescaleDB"],
+    category: ["API", "Database"],
+    liveUrl: "#",
+    featured: true,
+  },
+  {
+    id: 7,
+    title: "Serverless API with AWS Lambda",
+    description:
+      "Built a cost-effective and auto-scaling serverless API using AWS Lambda, API Gateway, and DynamoDB for a startup project.",
+    image: "/projects/cicd.jpg",
+    tags: ["AWS Lambda", "API Gateway", "DynamoDB", "Serverless", "Node.js"],
+    category: ["API", "DevOps"],
+    githubUrl: "#",
+    featured: false,
+  },
+  // Add more projects as needed
+]
+
+// Define filterCategories outside the component
+const filterCategoriesData: { name: string; value: ProjectCategory | "all" }[] = [
+  { name: "All Projects", value: "All" },
+  { name: "API Development", value: "API" },
+  { name: "Microservices", value: "Microservice" },
+  { name: "Database Solutions", value: "Database" },
+  { name: "DevOps & Infra", value: "DevOps" },
+]
+
 // Modern Project Card component with hover effects
-const ProjectCard = ({ project }: { project: Project }) => {
+const ProjectCardComponent = ({ project }: { project: Project }) => {
   return (
     <motion.div
       className={`group relative rounded-xl overflow-hidden ${project.featured ? "md:col-span-2" : ""}`}
@@ -96,9 +201,10 @@ const ProjectCard = ({ project }: { project: Project }) => {
     </motion.div>
   )
 }
+const ProjectCard = React.memo(ProjectCardComponent)
 
 // API Project Card with DatabaseWithRestApi visualization
-const ApiProjectCard = ({ project }: { project: Project }) => {
+const ApiProjectCardComponent = ({ project }: { project: Project }) => {
   return (
     <motion.div
       className="md:col-span-3 rounded-xl overflow-hidden bg-black/30 backdrop-blur-sm border border-white/10 p-6"
@@ -176,103 +282,28 @@ const ApiProjectCard = ({ project }: { project: Project }) => {
     </motion.div>
   )
 }
+const ApiProjectCard = React.memo(ApiProjectCardComponent)
 
 // Main ModernProjects component
-const ModernProjects = () => {
+const ModernProjectsComponent = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("all")
   const [visibleProjects, setVisibleProjects] = useState<number>(6)
 
   // State for category filter
   const [activeCategory, setActiveCategory] = useState<ProjectCategory>("All")
 
-  // Sample projects data
-  const projects: Project[] = [
-    {
-      id: 0, // Special API showcase project
-      title: "Advanced RESTful API Platform",
-      description:
-        "A comprehensive RESTful API platform with robust authentication, rate limiting, data validation, and extensive documentation. This platform serves as the backbone for multiple client applications with different access patterns and security requirements. Features include JWT-based authentication, role-based access control, request validation, thorough error handling, and comprehensive logging.",
-      image: "/projects/api.jpg",
-      tags: ["Node.js", "Express", "TypeScript", "MongoDB", "Redis", "JWT", "Swagger", "Docker"],
-      category: ["API", "Database"],
-      githubUrl: "#",
-      liveUrl: "#",
-      featured: true,
-    },
-    {
-      id: 1,
-      title: "E-Commerce Microservices API",
-      description:
-        "Developed a suite of microservices for an e-commerce platform, handling product catalog, user accounts, orders, and payments. Focused on high availability and fault tolerance.",
-      image: "/projects/api.jpg",
-      tags: ["Node.js", "TypeScript", "Microservices", "RabbitMQ", "PostgreSQL", "Docker", "Kubernetes"],
-      category: ["API", "Microservice"],
-      githubUrl: "#",
-      liveUrl: "#",
-      featured: true,
-    },
-    {
-      id: 2,
-      title: "Real-time Analytics Dashboard",
-      description:
-        "Built a backend system to process and display real-time analytics data using WebSockets and a time-series database. Optimized for high-volume data ingestion and low-latency querying.",
-      image: "/projects/analytics.jpg",
-      tags: ["Python", "FastAPI", "WebSockets", "InfluxDB", "Redis", "Grafana"],
-      category: ["API", "Database"],
-      githubUrl: "#",
-      featured: false,
-    },
-    {
-      id: 3,
-      title: "Headless CMS Backend",
-      description:
-        "Created a flexible and scalable backend for a headless CMS, allowing content creators to manage and distribute content across multiple channels via a robust API.",
-      image: "/projects/database.jpg",
-      tags: ["Node.js", "NestJS", "GraphQL", "PostgreSQL", "Elasticsearch", "AWS S3"],
-      category: ["API", "Database"],
-      githubUrl: "#",
-      liveUrl: "#",
-      featured: false,
-    },
-    {
-      id: 4,
-      title: "Cloud Infrastructure Orchestration",
-      description:
-        "Designed and implemented automated infrastructure provisioning and deployment pipelines using Terraform and Ansible on AWS. Managed scalable and resilient cloud environments.",
-      image: "/projects/cicd.jpg",
-      tags: ["Terraform", "Ansible", "AWS", "Docker", "Kubernetes", "CI/CD"],
-      category: ["DevOps"],
-      githubUrl: "#",
-      featured: true,
-    },
-    {
-      id: 5,
-      title: "Distributed Caching System",
-      description:
-        "Architected and implemented a distributed caching layer using Redis to reduce database load and improve application response times for a high-traffic web application.",
-      image: "/projects/database.jpg",
-      tags: ["Redis", "Node.js", "System Design", "Performance Optimization"],
-      category: ["Database", "API"],
-      githubUrl: "#",
-      featured: false,
-    },
-    {
-      id: 6,
-      title: "Secure Authentication Service",
-      description:
-        "Developed a centralized authentication and authorization service using OAuth 2.0 and JWT, providing single sign-on (SSO) capabilities for multiple applications.",
-      image: "/projects/auth.jpg",
-      tags: ["OAuth 2.0", "JWT", "Spring Boot", "Java", "Security", "OpenID Connect"],
-      category: ["API", "Microservice"],
-      githubUrl: "#",
-      liveUrl: "#",
-      featured: false,
-    },
-  ]
+  // Sample projects data (now defined outside as allProjectsData)
+  // const projects: Project[] = [ ... ]
 
-  // Filter projects based on active category
-  const filteredProjects =
-    activeCategory === "All" ? projects : projects.filter((project) => project.category.includes(activeCategory))
+  // Filter categories (now defined outside as filterCategoriesData)
+  // const filterCategories = [ ... ]
+
+  const filteredProjects = useMemo(() => {
+    if (activeCategory === "All") {
+      return allProjectsData
+    }
+    return allProjectsData.filter((project) => project.category.includes(activeCategory))
+  }, [activeCategory]) // Dependency: activeCategory (allProjectsData is stable)
 
   // Category filter options
   const categories: ProjectCategory[] = ["All", "API", "Microservice", "Database", "DevOps"]
@@ -333,14 +364,18 @@ const ModernProjects = () => {
           animate={{ opacity: 1 }}
           transition={{ staggerChildren: 0.1 }}
         >
-          {filteredProjects.map((project) => {
-            // Use special ApiProjectCard for the API showcase project (id: 0)
-            if (project.id === 0) {
-              return <ApiProjectCard key={project.id} project={project} />
-            }
-            // Use regular ProjectCard for all other projects
-            return <ProjectCard key={project.id} project={project} />
-          })}
+          {/* Featured API project card */}
+          {filteredProjects.find((p) => p.id === 0) && activeCategory === "All" && (
+            <ApiProjectCard project={filteredProjects.find((p) => p.id === 0)!} />
+          )}
+
+          {/* Regular project cards */}
+          {filteredProjects
+            .filter((p) => p.id !== 0) // Exclude the special API project if already shown
+            .slice(0, visibleProjects)
+            .map((project) => (
+              <ProjectCard key={project.id} project={project} />
+            ))}
         </motion.div>
 
         {/* View all projects button */}
@@ -360,4 +395,4 @@ const ModernProjects = () => {
   )
 }
 
-export default ModernProjects
+export default React.memo(ModernProjectsComponent)

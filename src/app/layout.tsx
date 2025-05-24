@@ -59,13 +59,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <head>
-        {/* Prevent browser extensions from modifying the DOM before React loads */}
-        <noscript id="prevent-extensions">{/* This helps avoid interference with React hydration */}</noscript>
-      </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} suppressHydrationWarning>
         <ThemeProviderWrapper>{children}</ThemeProviderWrapper>
-        <StagewiseToolbarWrapper />
+        {/* <StagewiseToolbarWrapper /> */}
       </body>
     </html>
   )

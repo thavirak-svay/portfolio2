@@ -1,36 +1,39 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --primary: #3b82f6;
-  --secondary: #10b981;
-  --accent: #8b5cf6;
-  --border: #e5e7eb;
-}
+@layer base {
+  :root {
+    --background: #ffffff;
+    --foreground: #171717;
+    --primary: #3b82f6;
+    --secondary: #10b981;
+    --accent: #8b5cf6;
+    --border: #e5e7eb;
+    --brand: 27 96% 61%;
+    --brand-foreground: 31 97% 72%;
+    /* Merged Theme Variables */
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --font-sans: var(--font-geist-sans);
+    --font-mono: var(--font-geist-mono);
+  }
 
-/* Theme Variables */
-:root {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* Dark mode variables - Using class selector instead of media query */
+  .dark {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+    --primary: #4f8df9;
+    --secondary: #15d997;
+    --accent: #9d70fb;
+    --border: #2d2d2d;
+    --brand: 31 97% 72%;
+    --brand-foreground: 27 96% 61%;
+  }
 
-/* Dark mode variables - Using class selector instead of media query */
-.dark {
-  --background: #0a0a0a;
-  --foreground: #ededed;
-  --primary: #4f8df9;
-  --secondary: #15d997;
-  --accent: #9d70fb;
-  --border: #2d2d2d;
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans);
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+  }
 }
 
 /* Custom Scrollbar */
@@ -76,6 +79,24 @@ body {
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+  .delay-100 {
+    animation-delay: 100ms;
+  }
+  .delay-300 {
+    animation-delay: 300ms;
+  }
+
+  /* Hover эффект для группы */
+  .group:hover .group-hover\:translate-y-\[-2rem\] {
+    --tw-translate-y: -2rem;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) /* rtl:ignore */
+      skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) /* rtl:ignore */
+      scaleY(var(--tw-scale-y)); /* rtl:ignore */
+  }
+
+  .group:hover .group-hover\:opacity-100 {
+    opacity: 1;
   }
 }
 
