@@ -11,18 +11,15 @@ import { RetroGrid } from "@/components/ui/RetroGrid"
 const cardColorConfig = {
   default: {
     effectColors: [[0, 255, 255]], // Default cyan
-    glowClasses: "from-cyan-500 to-cyan-400",
   },
   blue: {
     effectColors: [[125, 211, 252]], // Light blue
-    glowClasses: "from-blue-500 to-blue-400",
   },
   pink: {
     effectColors: [
       [236, 72, 153], // Pink
       [232, 121, 249], // Fuchsia
     ],
-    glowClasses: "from-pink-500 to-fuchsia-400",
   },
 }
 
@@ -43,7 +40,7 @@ const Card3DComponent = ({
   const [isHovered, setIsHovered] = useState(false)
 
   // Color configurations based on colorScheme
-  const { effectColors, glowClasses } = cardColorConfig[colorScheme]
+  const { effectColors } = cardColorConfig[colorScheme]
 
   return (
     <motion.div
@@ -58,30 +55,13 @@ const Card3DComponent = ({
       {/* The card with content */}
       <div className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm h-full relative overflow-hidden">
         {/* Canvas Effect Container */}
-        <div className="absolute inset-0 z-0 overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <CanvasRevealEffect
-            animationSpeed={3}
-            containerClassName="bg-black"
-            colors={effectColors}
-            dotSize={2}
-            showGradient={true}
-          />
-          <div className="absolute inset-0 [mask-image:radial-gradient(400px_at_center,transparent,white)] bg-black"></div>
+        <div className="absolute inset-0 opacity-100">
+          <CanvasRevealEffect animationSpeed={3} colors={effectColors} dotSize={2} showGradient={true} />
         </div>
-
-        {/* Glow effect on hover */}
-        <motion.div
-          className={`absolute -inset-0.5 rounded-xl bg-gradient-to-r ${glowClasses} opacity-0 z-10`}
-          animate={{
-            opacity: isHovered ? 0.3 : 0,
-          }}
-          transition={{ duration: 0.3 }}
-          style={{ filter: "blur(8px)" }}
-        />
 
         {/* Card content */}
         <div className="relative z-20 p-6">
-          <div className="p-3 rounded-lg bg-white/5 w-fit mb-4">{icon}</div>
+          <div className="p-3 rounded-lg w-fit mb-4">{icon}</div>
 
           <h3 className="text-lg font-bold mb-2">{title}</h3>
           <p className="text-sm opacity-70">{description}</p>

@@ -1,15 +1,15 @@
 "use client"
 import { cn } from "@/lib/utils"
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
-import React, { useMemo, useRef } from "react"
+import React, { useMemo, useRef, useCallback, useEffect, useState } from "react"
 import * as THREE from "three"
 
 export const CanvasRevealEffect = ({
   animationSpeed = 0.4,
-  opacities = [0.3, 0.3, 0.3, 0.5, 0.5, 0.5, 0.8, 0.8, 0.8, 1],
+  opacities = [0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1, 1],
   colors = [[0, 255, 255]],
   containerClassName,
-  dotSize,
+  dotSize = 4,
   showGradient = true,
 }: {
   /**
@@ -24,22 +24,34 @@ export const CanvasRevealEffect = ({
   showGradient?: boolean
 }) => {
   return (
-    <div className={cn("h-full relative bg-white w-full", containerClassName)}>
+    <div className={cn("h-full relative w-full", containerClassName)}>
       <div className="h-full w-full">
         <DotMatrix
           colors={colors ?? [[0, 255, 255]]}
-          dotSize={dotSize ?? 3}
-          opacities={opacities ?? [0.3, 0.3, 0.3, 0.5, 0.5, 0.5, 0.8, 0.8, 0.8, 1]}
+          dotSize={dotSize ?? 4}
+          totalSize={5}
+          opacities={opacities ?? [0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1, 1]}
           shader={`
               float animation_speed_factor = ${animationSpeed.toFixed(1)};
               float intro_offset = distance(u_resolution / 2.0 / u_total_size, st2) * 0.01 + (random(st2) * 0.15);
               opacity *= step(intro_offset, u_time * animation_speed_factor);
-              opacity *= clamp((1.0 - step(intro_offset + 0.1, u_time * animation_speed_factor)) * 1.25, 1.0, 1.25);
+              opacity *= clamp((1.0 - step(intro_offset + 0.1, u_time * animation_speed_factor)) * 1.35, 1.0, 1.35);
             `}
           center={["x", "y"]}
         />
       </div>
-      {showGradient && <div className="absolute inset-0 bg-gradient-to-t from-gray-950 to-[84%]" />}
+      {showGradient && (
+        <>
+          <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/80 via-20% to-transparent to-70%" />
+          <div
+            className="absolute inset-0 radial-gradient-mask"
+            style={{
+              background:
+                "radial-gradient(circle at center, transparent 50%, rgba(0,0,0,0.3) 85%, rgba(0,0,0,0.5) 100%)",
+            }}
+          />
+        </>
+      )}
     </div>
   )
 }
@@ -133,7 +145,7 @@ const DotMatrix: React.FC<DotMatrixProps> = ({
       fragColor.rgb *= fragColor.a;
         }`}
       uniforms={uniforms}
-      maxFps={60}
+      maxFps={30}
     />
   )
 }
@@ -147,7 +159,7 @@ type Uniforms = {
 const ShaderMaterial = ({
   source,
   uniforms,
-  maxFps = 60,
+  maxFps = 30,
 }: {
   source: string
   hovered?: boolean
@@ -157,21 +169,42 @@ const ShaderMaterial = ({
   const { size } = useThree()
   const ref = useRef<THREE.Mesh>(null!)
   let lastFrameTime = 0
+  const [isScrolling, setIsScrolling] = useState(false)
+
+  // Detect scrolling and set scroll state
+  useEffect(() => {
+    let scrollTimer: ReturnType<typeof setTimeout>
+
+    const handleScroll = () => {
+      setIsScrolling(true)
+      clearTimeout(scrollTimer)
+      scrollTimer = setTimeout(() => setIsScrolling(false), 150)
+    }
+
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+      clearTimeout(scrollTimer)
+    }
+  }, [])
 
   useFrame(({ clock }) => {
     if (!ref.current) return
     const timestamp = clock.getElapsedTime()
-    if (timestamp - lastFrameTime < 1 / maxFps) {
+
+    // Reduce frame rate during scrolling
+    const targetFps = isScrolling ? 15 : maxFps
+    if (timestamp - lastFrameTime < 1 / targetFps) {
       return
     }
-    lastFrameTime = timestamp
 
+    lastFrameTime = timestamp
     const material: any = ref.current.material
     const timeLocation = material.uniforms.u_time
     timeLocation.value = timestamp
   })
 
-  const getUniforms = () => {
+  const getUniforms = useCallback(() => {
     const preparedUniforms: any = {}
 
     for (const uniformName in uniforms) {
@@ -213,7 +246,7 @@ const ShaderMaterial = ({
       value: new THREE.Vector2(size.width * 2, size.height * 2),
     } // Initialize u_resolution
     return preparedUniforms
-  }
+  }, [uniforms, size.width, size.height])
 
   // Shader material
   const material = useMemo(() => {
@@ -240,7 +273,7 @@ const ShaderMaterial = ({
     })
 
     return materialObject
-  }, [size.width, size.height, source])
+  }, [source, getUniforms])
 
   return (
     <mesh ref={ref as any}>
@@ -250,9 +283,18 @@ const ShaderMaterial = ({
   )
 }
 
-const Shader: React.FC<ShaderProps> = ({ source, uniforms, maxFps = 60 }) => {
+const Shader: React.FC<ShaderProps> = ({ source, uniforms, maxFps = 30 }) => {
   return (
-    <Canvas className="absolute inset-0  h-full w-full">
+    <Canvas
+      gl={{
+        antialias: true,
+        preserveDrawingBuffer: true,
+        alpha: true,
+        powerPreference: "high-performance",
+      }}
+      className="absolute inset-0 h-full w-full"
+      dpr={[1.5, 2]}
+    >
       <ShaderMaterial source={source} uniforms={uniforms} maxFps={maxFps} />
     </Canvas>
   )

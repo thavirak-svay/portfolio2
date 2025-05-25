@@ -61,7 +61,7 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} suppressHydrationWarning>
         <ThemeProviderWrapper>{children}</ThemeProviderWrapper>
-        {/* <StagewiseToolbarWrapper /> */}
+        <StagewiseToolbarWrapper />
       </body>
     </html>
   )

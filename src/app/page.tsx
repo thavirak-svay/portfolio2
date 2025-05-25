@@ -16,7 +16,7 @@ export default function Home() {
       <ModernHero />
       <ModernAbout />
       <ModernSkills />
-      <ModernProjects />
+      {/* <ModernProjects /> */}
       <ModernExperience />
       <ModernContact />
       <ModernFooter />
