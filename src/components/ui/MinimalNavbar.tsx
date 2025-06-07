@@ -3,23 +3,8 @@
 import React, { useState, useEffect, useCallback } from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
-import { cn } from "@/lib/utils"
+import { cn, debounce } from "@/lib/utils"
 import { Home, User, FolderOpen, Award, Mail } from "lucide-react"
-
-// Debounce utility function
-function debounce<F extends (...args: any[]) => any>(func: F, waitFor: number) {
-  let timeout: NodeJS.Timeout | null = null
-
-  const debounced = (...args: Parameters<F>) => {
-    if (timeout !== null) {
-      clearTimeout(timeout)
-      timeout = null
-    }
-    timeout = setTimeout(() => func(...args), waitFor)
-  }
-
-  return debounced as (...args: Parameters<F>) => ReturnType<F>
-}
 
 // Define navigation items - keep it minimal with icons
 const navItems = [

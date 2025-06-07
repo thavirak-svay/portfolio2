@@ -1,4 +1,4 @@
-import { HeroSection } from "@/components/blocks/hero-section-dark"
+import { HeroSection } from "@/components/ui/hero-section-dark"
 
 function HeroSectionDemo() {
   return (

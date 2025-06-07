@@ -47,11 +47,6 @@ export const metadata: Metadata = {
   },
 }
 
-// Client Component wrapper for ThemeProvider
-function ThemeProviderWrapper({ children }: { children: React.ReactNode }) {
-  return <ThemeProvider>{children}</ThemeProvider>
-}
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -60,7 +55,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} suppressHydrationWarning>
-        <ThemeProviderWrapper>{children}</ThemeProviderWrapper>
+        <ThemeProvider>{children}</ThemeProvider>
         <StagewiseToolbarWrapper />
       </body>
     </html>

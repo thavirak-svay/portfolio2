@@ -16,6 +16,7 @@ export default function Home() {
       <ModernHero />
       <ModernAbout />
       <ModernSkills />
+      // TODO: ModernProjects component is implemented but commented out. Review if it should be re-enabled.
       {/* <ModernProjects /> */}
       <ModernExperience />
       <ModernContact />
