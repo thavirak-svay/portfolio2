@@ -2,7 +2,6 @@
 
 import { memo, useCallback, useEffect, useRef } from "react"
 import { cn } from "@/lib/utils"
-import { animate } from "motion/react"
 
 interface GlowingEffectProps {
   blur?: number
@@ -16,6 +15,7 @@ interface GlowingEffectProps {
   movementDuration?: number
   borderWidth?: number
 }
+
 const GlowingEffect = memo(
   ({
     blur = 0,
@@ -32,6 +32,18 @@ const GlowingEffect = memo(
     const containerRef = useRef<HTMLDivElement>(null)
     const lastPosition = useRef({ x: 0, y: 0 })
     const animationFrameRef = useRef<number>(0)
+
+    // Simplified animation function using CSS transitions
+    const animateAngle = useCallback(
+      (element: HTMLElement, currentAngle: number, targetAngle: number) => {
+        const angleDiff = ((targetAngle - currentAngle + 180) % 360) - 180
+        const newAngle = currentAngle + angleDiff
+
+        element.style.transition = `--start ${movementDuration}s cubic-bezier(0.16, 1, 0.3, 1)`
+        element.style.setProperty("--start", String(newAngle))
+      },
+      [movementDuration]
+    )
 
     const handleMove = useCallback(
       (e?: MouseEvent | { x: number; y: number }) => {
@@ -75,19 +87,10 @@ const GlowingEffect = memo(
           const currentAngle = parseFloat(element.style.getPropertyValue("--start")) || 0
           let targetAngle = (180 * Math.atan2(mouseY - center[1], mouseX - center[0])) / Math.PI + 90
 
-          const angleDiff = ((targetAngle - currentAngle + 180) % 360) - 180
-          const newAngle = currentAngle + angleDiff
-
-          animate(currentAngle, newAngle, {
-            duration: movementDuration,
-            ease: [0.16, 1, 0.3, 1],
-            onUpdate: (value) => {
-              element.style.setProperty("--start", String(value))
-            },
-          })
+          animateAngle(element, currentAngle, targetAngle)
         })
       },
-      [inactiveZone, proximity, movementDuration]
+      [inactiveZone, proximity, animateAngle]
     )
 
     useEffect(() => {

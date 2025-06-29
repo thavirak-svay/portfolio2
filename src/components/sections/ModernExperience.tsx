@@ -236,4 +236,5 @@ const ModernExperienceComponent = () => {
   )
 }
 
-export default React.memo(ModernExperienceComponent)
+const ModernExperience = React.memo(ModernExperienceComponent)
+export default ModernExperience

@@ -1,28 +1,43 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import { motion } from "framer-motion"
-import { CodeBracketIcon, ServerIcon, CubeIcon, CircleStackIcon } from "@heroicons/react/24/outline"
+import {
+  AcademicCapIcon,
+  CpuChipIcon,
+  GlobeAltIcon,
+  BeakerIcon,
+  BuildingOfficeIcon,
+  CommandLineIcon,
+  DocumentTextIcon,
+  PaintBrushIcon,
+  ShieldCheckIcon,
+  WrenchScrewdriverIcon,
+  CubeIcon,
+  CloudIcon,
+  DevicePhoneMobileIcon,
+  ServerIcon,
+  ComputerDesktopIcon,
+  CircleStackIcon,
+  CodeBracketIcon,
+} from "@heroicons/react/24/outline"
 import {
   Brain,
   Database,
-  Cloud,
-  Zap,
-  GitMerge,
-  Settings,
-  Share2,
-  ShieldCheck,
-  SlidersHorizontal,
-  TerminalSquare,
+  GitBranch,
+  MessageSquare,
+  CheckCircle,
+  TrendingUp,
+  Code2,
+  Palette,
+  Globe,
   Workflow,
-  Rabbit,
-  Waves,
-  Network,
-  Cable,
+  TestTube,
+  Shield,
 } from "lucide-react"
 import { GlowingEffect } from "@/components/ui/GlowingEffect"
 import DotPattern from "@/components/ui/DotPattern1"
-import { RetroGrid } from "@/components/ui/RetroGrid"
+import { cn } from "@/lib/utils"
 
 // Define backendSkills and additionalSkills arrays outside the component
 const backendSkillsData = [
@@ -34,13 +49,6 @@ const backendSkillsData = [
     color: "primary" as const,
   },
   {
-    icon: <CodeBracketIcon className="w-6 h-6" />,
-    title: "Python",
-    proficiency: 85,
-    description: "Creating robust web services with FastAPI, Flask & Django for data processing & automation.",
-    color: "accent" as const,
-  },
-  {
     icon: <CubeIcon className="w-6 h-6" />,
     title: "Go (Golang)",
     proficiency: 78,
@@ -48,7 +56,14 @@ const backendSkillsData = [
     color: "secondary" as const,
   },
   {
-    icon: <CircleStackIcon className="w-6 h-6" />,
+    icon: <CubeIcon className="w-6 h-6" />,
+    title: "Python",
+    proficiency: 85,
+    description: "Creating robust web services with FastAPI, Flask & Django for data processing & automation.",
+    color: "accent" as const,
+  },
+  {
+    icon: <CubeIcon className="w-6 h-6" />,
     title: "Database Design",
     proficiency: 92,
     description: "Expert in schema design, query optimization & management of SQL and NoSQL databases.",
@@ -251,14 +266,9 @@ const ModernSkillsComponent = () => {
 
   return (
     <section id="skills" className="py-20 px-6 relative overflow-hidden">
-      {/* Background blur elements */}
-      <div className="absolute top-40 right-10 w-80 h-80 bg-primary/10 rounded-full filter blur-3xl opacity-30 -z-10"></div>
-      <div className="absolute bottom-40 left-10 w-80 h-80 bg-accent/10 rounded-full filter blur-3xl opacity-20 -z-10"></div>
-
-      {/* RetroGrid for top 1/3 of section only */}
-      <div className="absolute inset-x-0 top-0 h-1/3 z-0 overflow-hidden">
-        <RetroGrid className="opacity-70" />
-      </div>
+      {/* Background elements */}
+      <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary/10 rounded-full filter blur-3xl opacity-50 -z-10"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-accent/10 rounded-full filter blur-3xl opacity-50 -z-10"></div>
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Section header */}
@@ -348,4 +358,5 @@ const ModernSkillsComponent = () => {
   )
 }
 
-export default React.memo(ModernSkillsComponent)
+const ModernSkills = React.memo(ModernSkillsComponent)
+export default ModernSkills

@@ -5,6 +5,8 @@ import { motion } from "framer-motion"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { Home, User, FolderOpen, Award, Mail } from "lucide-react"
+import GlassPanel from "@/components/ui/GlassPanel"
+import { useTheme } from "@/components/ui/ThemeProvider"
 
 // Debounce utility function
 function debounce<F extends (...args: any[]) => any>(func: F, waitFor: number) {
@@ -31,6 +33,7 @@ const navItems = [
 ]
 
 const MinimalNavbarComponent = () => {
+  const { theme } = useTheme()
   const [mounted, setMounted] = useState(false)
   const [activeSection, setActiveSection] = useState("Home")
   const [isMobile, setIsMobile] = useState(false)
@@ -146,23 +149,25 @@ const MinimalNavbarComponent = () => {
         initial={{ opacity: 0, y: isMobile ? 20 : -20 }}
         animate={{
           opacity: isVisible ? 1 : 0,
-          y: isVisible ? 0 : isMobile ? 150 : -150, // Increased to ensure it's completely off-screen
-          pointerEvents: isVisible ? "auto" : "none", // Disable interactions when hidden
+          y: isVisible ? 0 : isMobile ? 150 : -150,
+          pointerEvents: isVisible ? "auto" : "none",
         }}
         transition={{
           type: "spring",
           stiffness: 300,
           damping: 25,
-          opacity: { duration: 0.15 }, // Even faster opacity transition
+          opacity: { duration: 0.15 },
         }}
       >
         <div className="mx-auto flex justify-center px-4">
-          <div
+          <GlassPanel
+            variant={isMobile ? "strong" : "panel"}
+            darkMode={theme === "dark"}
             className={cn(
-              "flex items-center backdrop-blur-md",
+              "flex items-center backdrop-blur-xl border border-white/20 dark:border-white/10",
               isMobile
-                ? "justify-evenly bg-black/40 gap-2 rounded-full w-auto px-4 py-3 shadow-[0_4px_12px_rgba(0,0,0,0.15)]"
-                : "gap-8 bg-black/25 border border-white/10 rounded-full px-8 py-2 shadow-[0_2px_20px_rgba(0,0,0,0.1)]"
+                ? "justify-evenly gap-2 rounded-full w-auto px-4 py-3 shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
+                : "gap-8 rounded-full px-8 py-2 shadow-[0_4px_24px_rgba(0,0,0,0.2)]"
             )}
           >
             {navItems.map((item) => {
@@ -197,20 +202,28 @@ const MinimalNavbarComponent = () => {
                     isActive ? "text-white" : "text-white/60 hover:text-white"
                   )}
                 >
-                  {/* Active indicator */}
+                  {/* Enhanced active indicator with glass effect */}
                   {isActive && (
                     <motion.div
                       layoutId="nav-indicator"
                       className={cn(
                         "absolute",
                         isMobile
-                          ? "h-full w-full rounded-full bg-gradient-to-r from-primary/30 to-accent/30 -z-10"
+                          ? "h-full w-full rounded-full -z-10"
                           : "-bottom-0.5 left-0 right-0 h-[2px] bg-gradient-to-r from-primary via-accent to-primary"
                       )}
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ type: "spring", stiffness: 350, damping: 30 }}
-                    />
+                    >
+                      {isMobile && (
+                        <GlassPanel
+                          variant="panel"
+                          darkMode={theme === "dark"}
+                          className="h-full w-full rounded-full backdrop-blur-lg bg-gradient-to-r from-primary/20 to-accent/20"
+                        />
+                      )}
+                    </motion.div>
                   )}
 
                   {/* Mobile: Icon only, Desktop: Text */}
@@ -228,7 +241,7 @@ const MinimalNavbarComponent = () => {
                 </Link>
               )
             })}
-          </div>
+          </GlassPanel>
         </div>
       </motion.nav>
     </div>

@@ -1,197 +1,148 @@
 "use client"
 
-import React, { useRef, useState, useEffect } from "react"
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
-import { DocumentTextIcon, RocketLaunchIcon, UserGroupIcon } from "@heroicons/react/24/outline"
+import GlassEffect from "@/components/ui/GlassEffect"
+import { useTheme } from "@/components/ui/ThemeProvider"
+import { motion } from "framer-motion"
 import Image from "next/image"
-import { CanvasRevealEffect } from "../ui/CanvasRevealEffect"
-import { RetroGrid } from "@/components/ui/RetroGrid"
+import React, { useRef, useState } from "react"
 
-// Define colorConfig outside the component
-const cardColorConfig = {
-  default: {
-    effectColors: [[0, 255, 255]], // Default cyan
-  },
-  blue: {
-    effectColors: [[125, 211, 252]], // Light blue
-  },
-  pink: {
-    effectColors: [
-      [236, 72, 153], // Pink
-      [232, 121, 249], // Fuchsia
-    ],
-  },
-}
-
-// Modern 3D card component with Canvas Reveal Effect
-type ColorScheme = "default" | "blue" | "pink"
-
-const Card3DComponent = ({
-  icon,
-  title,
-  description,
-  colorScheme = "default",
-}: {
-  icon: React.ReactNode
+interface Card3DProps {
   title: string
   description: string
-  colorScheme?: ColorScheme
-}) => {
-  const [isHovered, setIsHovered] = useState(false)
+}
 
-  // Color configurations based on colorScheme
-  const { effectColors } = cardColorConfig[colorScheme]
+const Card3DComponent: React.FC<Card3DProps> = ({ title, description }) => {
+  const [isHovered, setIsHovered] = useState(false)
+  const cardRef = useRef<HTMLDivElement>(null)
+  const { theme } = useTheme()
 
   return (
     <motion.div
-      className="group relative h-full"
+      ref={cardRef}
+      className="group relative h-full cursor-pointer"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.5, delay: 0.2 }}
       viewport={{ once: true }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      whileHover={{ y: -5 }}
     >
-      {/* The card with content */}
-      <div className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm h-full relative overflow-hidden">
-        {/* Canvas Effect Container */}
-        <div className="absolute inset-0 opacity-100">
-          <CanvasRevealEffect animationSpeed={3} colors={effectColors} dotSize={2} showGradient={true} />
+      <GlassEffect className="h-full p-6">
+        {/* Content - centered */}
+        <div className="text-center h-full flex flex-col justify-center">
+          <h3 className="text-lg font-bold mb-3 text-gray-900 dark:text-white group-hover:text-primary transition-colors duration-300">
+            {title}
+          </h3>
+          <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed opacity-70">{description}</p>
         </div>
-
-        {/* Card content */}
-        <div className="relative z-20 p-6">
-          <div className="p-3 rounded-lg w-fit mb-4">{icon}</div>
-
-          <h3 className="text-lg font-bold mb-2">{title}</h3>
-          <p className="text-sm opacity-70">{description}</p>
-        </div>
-      </div>
+      </GlassEffect>
     </motion.div>
   )
 }
 
 const Card3D = React.memo(Card3DComponent)
 
-// Floating elements for background
-const FloatingElementsComponent = () => {
-  const [elements, setElements] = React.useState<React.ReactNode[]>([])
+// Enhanced Stats Card Component
+const StatsCard = ({ title, value, description }: { title: string; value: string; description: string }) => {
+  const { theme } = useTheme()
 
-  // Generate elements only on the client side after component mounts
-  React.useEffect(() => {
-    const newElements = Array.from({ length: 20 }).map((_, index) => (
-      <motion.div
-        key={index}
-        className={`absolute rounded-lg bg-white/5 backdrop-blur-sm border border-white/10
-          ${index % 2 === 0 ? "w-8 h-8" : "w-16 h-16"}
-          ${index % 3 === 0 ? "bg-primary/10" : "bg-accent/10"}
-        `}
-        animate={{
-          y: [0, -10, 0],
-          rotate: [0, 5, 0],
-        }}
-        transition={{
-          duration: Math.random() * 5 + 5,
-          ease: "easeInOut",
-          repeat: Infinity,
-          delay: Math.random() * 5,
-        }}
-        style={{
-          left: `${Math.random() * 100}%`,
-          top: `${Math.random() * 100}%`,
-        }}
-      />
-    ))
-    setElements(newElements)
-  }, [])
-
-  return <div className="absolute inset-0 overflow-hidden -z-10 opacity-40">{elements}</div>
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.8 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.5 }}
+      viewport={{ once: true }}
+      whileHover={{ y: -5 }}
+    >
+      <GlassEffect className="p-6 text-center h-full">
+        <h4 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">{title}</h4>
+        <div className="text-3xl font-bold mb-2 text-blue-600 dark:text-blue-400">{value}</div>
+        <p className="text-sm text-gray-600 dark:text-gray-300">{description}</p>
+      </GlassEffect>
+    </motion.div>
+  )
 }
 
-const FloatingElements = React.memo(FloatingElementsComponent)
+// Simple Card Component for Core Strengths (without glass effects)
+const SimpleCard: React.FC<Card3DProps> = ({ title, description }) => {
+  return (
+    <motion.div
+      className="group relative h-full cursor-pointer"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.2 }}
+      viewport={{ once: true }}
+      whileHover={{ y: -5 }}
+    >
+      <div className="h-full p-6 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition-all duration-300">
+        {/* Content - centered */}
+        <div className="text-center h-full flex flex-col justify-center">
+          <h3 className="text-lg font-bold mb-3 text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
+            {title}
+          </h3>
+          <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">{description}</p>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
 
 const ModernAboutComponent = () => {
   const containerRef = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"],
-  })
-
-  // Parallax effects for scroll
-  const imageY = useTransform(scrollYProgress, [0, 1], [-50, 50])
+  const { theme } = useTheme()
 
   return (
-    <section ref={containerRef} id="about" className="py-20 px-6 relative overflow-hidden">
-      {/* Background elements */}
-      <FloatingElements />
-      <div className="absolute top-1/3 left-0 w-72 h-72 rounded-full bg-primary/20 filter blur-3xl opacity-30 -z-10"></div>
-      <div className="absolute bottom-1/3 right-0 w-72 h-72 rounded-full bg-accent/20 filter blur-3xl opacity-30 -z-10"></div>
+    <section ref={containerRef} id="about" className="relative py-20 bg-gray-50 dark:bg-gray-900 overflow-hidden">
+      {/* Enhanced background patterns */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-blue-50/30 to-indigo-50/50 dark:from-gray-900/50 dark:via-slate-800/30 dark:to-slate-900/50" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(120,119,198,0.1),transparent_50%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(147,51,234,0.1),transparent_50%)]" />
 
-      {/* RetroGrid for top 1/3 of section only */}
-      <div className="absolute inset-x-0 top-0 h-1/3 z-0 overflow-hidden">
-        <RetroGrid className="opacity-70" />
-      </div>
-
-      <div className="max-w-7xl mx-auto relative z-10">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section header */}
         <motion.div
-          className="text-center mt-8 mb-36 relative"
+          className="text-center mb-16"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <div className="inline-block px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-4">
-            <span className="text-primary text-sm font-medium">About Me</span>
-          </div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">Backend Specialist</h2>
-          <p className="max-w-2xl mx-auto opacity-70">
-            Crafting robust, scalable backend solutions for modern applications. Passionate about clean code,
-            performance optimization, and elegant architectures.
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">About Me</h2>
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            Passionate backend developer with extensive experience in building scalable, high-performance applications
+            using modern technologies and architectural patterns.
           </p>
         </motion.div>
 
-        {/* Main content */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Left side - text content */}
-          <div className="space-y-6">
-            <motion.p
-              className="text-lg leading-relaxed"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-            >
-              With over 7 years of experience specializing in backend development, I&apos;ve built and architected
-              systems that power applications used by millions of users. My focus is on creating scalable, maintainable,
-              and high-performance server-side solutions.
-            </motion.p>
+        {/* About content with image */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start mb-20">
+          {/* Image section */}
+          <motion.div
+            className="relative z-20"
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <GlassEffect className="overflow-hidden">
+              <motion.div className="w-full">
+                <Image
+                  src="/projects/database.jpg"
+                  alt="Backend development workspace"
+                  width={600}
+                  height={700}
+                  className="w-full h-auto object-cover"
+                  priority
+                />
+              </motion.div>
 
-            <motion.p
-              className="opacity-70"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              viewport={{ once: true }}
-            >
-              I specialize in distributed systems, API design, database optimization, and cloud architecture. My
-              approach combines technical expertise with a deep understanding of business requirements to deliver
-              solutions that not only work flawlessly but also provide long-term value.
-            </motion.p>
-          </div>
-
-          {/* Right side - image with parallax */}
-          <motion.div className="relative" style={{ y: imageY }}>
-            <div className="relative h-[500px] w-full rounded-xl overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 opacity-70 z-10 mix-blend-overlay" />
-              <div className="absolute inset-0 bg-black/20 z-10" />
-              <Image src="/projects/portfolio-screenshot.jpg" alt="Developer workspace" fill className="object-cover" />
-
-              {/* Decorative code overlay */}
+              {/* Enhanced code overlay */}
               <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
-                <pre className="text-xs text-white/70 font-mono rounded-lg backdrop-blur-sm p-4 bg-black/30">
-                  <code>
-                    {`// Backend architecture
+                <GlassEffect className="p-4">
+                  <pre className="text-xs text-gray-700 dark:text-gray-300 font-mono">
+                    <code>
+                      {`// Backend architecture
 const createServer = async () => {
   const app = express();
   app.use(compression());
@@ -202,45 +153,66 @@ const createServer = async () => {
   
   return app.listen(PORT);
 }`}
-                  </code>
-                </pre>
+                    </code>
+                  </pre>
+                </GlassEffect>
               </div>
+            </GlassEffect>
+          </motion.div>
+
+          {/* Text content */}
+          <motion.div
+            className="space-y-6"
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
+              With over 7 years of experience in backend development, I specialize in creating robust, scalable
+              server-side applications that power modern digital experiences. My expertise spans across multiple
+              programming languages and frameworks, with a strong focus on performance optimization and clean
+              architecture.
+            </p>
+
+            <p className="text-gray-600 dark:text-gray-400">
+              I have successfully architected and implemented microservices, RESTful APIs, and distributed systems that
+              handle millions of requests while maintaining exceptional performance standards. My approach combines
+              technical excellence with business understanding to deliver solutions that drive growth.
+            </p>
+
+            {/* Enhanced stats grid */}
+            <div className="grid grid-cols-2 gap-4 mt-8">
+              <StatsCard title="Experience" value="7+" description="years building production systems" />
+              <StatsCard title="Focus" value="100%" description="scalable backend architectures" />
             </div>
           </motion.div>
         </div>
 
-        {/* Core strengths - 3D cards */}
+        {/* Core strengths - Simple and clean without glass effects */}
         <div className="mt-24">
-          <motion.h3
-            className="text-2xl font-bold mb-8 text-center"
+          <motion.div
+            className="text-center mb-12"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
           >
-            Core Strengths
-          </motion.h3>
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Core Strengths</h3>
+          </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card3D
-              icon={<RocketLaunchIcon className="w-6 h-6" />}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <SimpleCard
               title="Scalable Architecture"
-              description="Designing systems that gracefully handle growing user bases and increased load without sacrificing performance."
-              colorScheme="pink" // Pink/fuchsia gradient
+              description="Designing microservices and distributed systems that scale with your business needs."
             />
-
-            <Card3D
-              icon={<DocumentTextIcon className="w-6 h-6" />}
+            <SimpleCard
               title="API Development"
-              description="Creating intuitive, efficient, and secure APIs that provide seamless integration between services."
-              colorScheme="blue" // Light blue
+              description="Building robust RESTful APIs and GraphQL endpoints with comprehensive documentation."
             />
-
-            <Card3D
-              icon={<UserGroupIcon className="w-6 h-6" />}
+            <SimpleCard
               title="Team Leadership"
-              description="Leading development teams with a focus on code quality, best practices, and continuous improvement."
-              colorScheme="default" // Default cyan
+              description="Leading development teams and mentoring junior developers to achieve technical excellence."
             />
           </div>
         </div>
@@ -249,4 +221,5 @@ const createServer = async () => {
   )
 }
 
-export default React.memo(ModernAboutComponent)
+const ModernAbout = React.memo(ModernAboutComponent)
+export default ModernAbout

@@ -1,10 +1,13 @@
 "use client"
 
-import React from "react"
+import GlassEffect from "@/components/ui/GlassEffect"
+import { useTheme } from "@/components/ui/ThemeProvider"
+import { ArrowDownIcon, CodeBracketIcon } from "@heroicons/react/24/outline"
 import { motion } from "framer-motion"
+import { Code, Sparkles, Zap } from "lucide-react"
+import React, { useEffect, useState } from "react"
 import { TypeAnimation } from "react-type-animation"
-import { ArrowDownIcon, CommandLineIcon, CodeBracketIcon, ServerIcon } from "@heroicons/react/24/outline"
-import Background from "../ui/Background"
+import LightBackground from "../ui/LightBackground"
 
 // Define these outside the component so they are not recreated on every render
 const heroGradientColors = [
@@ -17,109 +20,138 @@ const heroGradientColors = [
 const heroGradientStops = [20, 40, 65, 85, 100]
 
 // Define tech stack array outside the component
-const techStack = ["TypeScript", "Python", "Node.js", "PostgreSQL", "MongoDB", "Redis", "Docker", "AWS"]
+const techStack = ["Java 17", "Spring Boot", "Spring Security", "PostgreSQL", "Docker", "Maven", "JUnit", "Git"]
 
-// 3D Code Block Component
-const CodeBlock3DComponent = () => {
-  return (
-    <div className="relative perspective-1000 w-full h-full">
-      <div className="relative transform-gpu rotate-y-6 rotate-x-12 transition-transform duration-500 hover:rotate-y-0 hover:rotate-x-0">
-        <div className="absolute inset-0 bg-gradient-to-r from-primary to-accent opacity-20 blur-lg -z-10"></div>
-
-        {/* Code window frame */}
-        <div className="rounded-xl overflow-hidden border border-white/10 bg-black/80 backdrop-blur-xl shadow-2xl">
-          {/* Code window header */}
-          <div className="flex items-center gap-1.5 px-4 py-3 border-b border-white/10 bg-black/50">
-            <div className="w-3 h-3 rounded-full bg-red-500"></div>
-            <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-            <div className="w-3 h-3 rounded-full bg-green-500"></div>
-            <span className="ml-2 text-xs text-white/70 font-mono">backend_developer.ts</span>
-          </div>
-
-          {/* Code content */}
-          <div className="p-6">
-            <pre className="text-xs sm:text-sm md:text-base font-mono">
-              <div className="text-blue-400">
-                class <span className="text-green-400">BackendDeveloper</span> {"{"}
-              </div>
-              <div className="pl-4 text-yellow-400">constructor() {"{"}</div>
-              <div className="pl-8 text-white">
-                this.<span className="text-blue-300">languages</span> = [
-              </div>
-              <div className="pl-12 text-orange-300">&apos;TypeScript&apos;, &apos;Python&apos;, &apos;Go&apos;</div>
-              <div className="pl-8 text-white">];</div>
-              <div className="pl-8 text-white">
-                this.<span className="text-blue-300">databases</span> = [
-              </div>
-              <div className="pl-12 text-orange-300">
-                &apos;PostgreSQL&apos;, &apos;MongoDB&apos;, &apos;Redis&apos;
-              </div>
-              <div className="pl-8 text-white">];</div>
-              <div className="pl-8 text-white">
-                this.<span className="text-blue-300">frameworks</span> = [
-              </div>
-              <div className="pl-12 text-orange-300">&apos;Node.js&apos;, &apos;Express&apos;, &apos;NestJS&apos;</div>
-              <div className="pl-8 text-white">];</div>
-              <div className="pl-4 text-yellow-400">{"}"}</div>
-              <div className="pl-4 text-purple-400">
-                createScalableSolutions<span className="text-white">()</span> {"{"}
-              </div>
-              <div className="pl-8 text-green-300">{/* Your vision, my expertise */}</div>
-              <div className="pl-8 text-pink-400">
-                return <span className="text-orange-300">&apos;Robust Systems&apos;</span>;
-              </div>
-              <div className="pl-4 text-purple-400">{"}"}</div>
-              <div className="text-blue-400">{"}"}</div>
-            </pre>
-          </div>
-        </div>
-
-        {/* Reflection effect */}
-        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-primary/10 to-transparent rounded-xl transform translate-y-full scale-y-50 blur-sm opacity-40"></div>
-      </div>
-    </div>
-  )
-}
-const CodeBlock3D = React.memo(CodeBlock3DComponent)
-
-// Feature Card
-const FeatureCardComponent = ({
-  icon,
+// Feature Card Component with Enhanced Glassmorphism
+const FeatureCard = ({
+  icon: Icon,
   title,
   description,
+  delay,
 }: {
-  icon: React.ReactNode
+  icon: any
   title: string
   description: string
+  delay: number
 }) => {
+  const { theme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) return null
+
+  return (
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay }}>
+      <GlassEffect className="p-6 group transition-all duration-300">
+        <div className="flex items-center gap-3 mb-3">
+          <div className="p-2 rounded-lg bg-gradient-to-br from-blue-500/20 to-purple-500/20 group-hover:from-blue-500/30 group-hover:to-purple-500/30 transition-all duration-300">
+            <Icon className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+          </div>
+          <h3 className="font-semibold text-gray-900 dark:text-white">{title}</h3>
+        </div>
+        <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">{description}</p>
+      </GlassEffect>
+    </motion.div>
+  )
+}
+
+// Enhanced 3D Code Block with Better Glassmorphism
+const CodeBlock3D = () => {
+  const { theme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) return null
+
   return (
     <motion.div
-      whileHover={{ y: -5 }}
-      className="flex items-start gap-4 p-4 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm"
+      initial={{ opacity: 0, rotateX: 20 }}
+      animate={{ opacity: 1, rotateX: 0 }}
+      transition={{ duration: 0.8, delay: 0.4 }}
+      className="relative"
+      style={{ perspective: "1000px" }}
     >
-      <div className="p-2 rounded-lg bg-primary/10 text-primary">{icon}</div>
-      <div>
-        <h3 className="font-medium">{title}</h3>
-        <p className="text-sm opacity-70 mt-1">{description}</p>
+      <div
+        className="relative transform-gpu transition-transform duration-300 hover:rotateX-5 hover:rotateY-5"
+        style={{ transformStyle: "preserve-3d" }}
+      >
+        <GlassEffect className="p-6 font-mono text-sm overflow-hidden">
+          <div className="flex items-center gap-2 mb-4">
+            <div className="flex gap-1.5">
+              <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
+              <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+              <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
+            </div>
+            <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">portfolio.tsx</span>
+          </div>
+
+          <div className="space-y-2 text-left">
+            <div className="text-purple-600 dark:text-purple-400">
+              <span className="text-gray-500 dark:text-gray-400">const</span> developer = {"{"}
+            </div>
+            <div className="pl-4">
+              <div className="text-blue-600 dark:text-blue-400">
+                name: <span className="text-green-600 dark:text-green-400">&apos;John Doe&apos;</span>,
+              </div>
+              <div className="text-blue-600 dark:text-blue-400">
+                skills: [<span className="text-green-600 dark:text-green-400">&apos;React&apos;</span>,{" "}
+                <span className="text-green-600 dark:text-green-400">&apos;TypeScript&apos;</span>],
+              </div>
+              <div className="text-blue-600 dark:text-blue-400">
+                passion: <span className="text-green-600 dark:text-green-400">&apos;Building Amazing UIs&apos;</span>
+              </div>
+            </div>
+            <div className="text-purple-600 dark:text-purple-400">{"}"}</div>
+          </div>
+
+          {/* Animated cursor */}
+          <motion.div
+            className="inline-block w-2 h-5 bg-blue-500 ml-1"
+            animate={{ opacity: [1, 0, 1] }}
+            transition={{ duration: 1, repeat: Infinity }}
+          />
+        </GlassEffect>
+
+        {/* 3D shadow effect */}
+        <div
+          className="absolute inset-0 bg-black/20 dark:bg-black/40 rounded-[20px] -z-10"
+          style={{
+            transform: "translateZ(-50px) translateY(10px)",
+            filter: "blur(20px)",
+          }}
+        />
       </div>
     </motion.div>
   )
 }
-const FeatureCard = React.memo(FeatureCardComponent)
 
 // Main Hero Component
 const ModernHeroComponent = () => {
+  const { theme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) return null
+
   return (
     <section
       id="hero"
       className="relative min-h-screen w-full flex flex-col justify-center pt-20 pb-10 px-6 overflow-hidden"
     >
       {/* Background effects */}
-      <Background
+      <LightBackground
         Breathing={true}
         startingGap={140}
         breathingRange={10}
-        animationSpeed={0.01}
         gradientColors={heroGradientColors}
         gradientStops={heroGradientStops}
         topOffset={10}
@@ -133,63 +165,12 @@ const ModernHeroComponent = () => {
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="flex flex-col gap-6"
         >
-          {/* Enhanced Badge */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
-            className="w-fit px-5 py-2.5 border border-green-400/30 bg-gradient-to-r from-green-600/40 via-emerald-500/30 to-green-400/30 rounded-full backdrop-blur-md flex items-center gap-3.5 shadow-lg shadow-green-500/30"
-          >
-            {/* Animated status indicator with improved effects */}
-            <div className="relative flex-shrink-0">
-              {/* Outermost glow */}
-              <motion.span
-                className="absolute rounded-full bg-green-400/20"
-                animate={{
-                  opacity: [0.2, 0.4, 0.2],
-                  scale: [1, 1.6, 1],
-                  filter: ["blur(2px)", "blur(3px)", "blur(2px)"],
-                }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              ></motion.span>
-
-              {/* Core dot with enhanced pulse */}
-              <motion.span
-                className="inline-block w-3 h-3 rounded-full bg-gradient-to-b from-green-300 to-green-500"
-                animate={{
-                  opacity: [0.85, 1, 0.85],
-                  scale: [0.95, 1.05, 0.95],
-                  boxShadow: [
-                    "0 0 5px rgba(74, 222, 128, 0.5)",
-                    "0 0 12px rgba(74, 222, 128, 0.8)",
-                    "0 0 5px rgba(74, 222, 128, 0.5)",
-                  ],
-                }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              ></motion.span>
-            </div>
-
-            <motion.div className="flex flex-col">
-              <motion.span className="text-xs font-medium text-green-300">Available for</motion.span>
-              <motion.span className="text-sm font-bold text-white tracking-wide">New Opportunities</motion.span>
-            </motion.div>
-          </motion.div>
-
           {/* Main heading */}
           <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight">
             <div>Building</div>
             <div className="text-gradient bg-gradient-to-r from-primary via-accent to-secondary">
               <TypeAnimation
-                sequence={[
-                  "Scalable APIs",
-                  1500,
-                  "Microservices",
-                  1500,
-                  "Cloud Solutions",
-                  1500,
-                  "Data Pipelines",
-                  1500,
-                ]}
+                sequence={["Spring Boot Apps", 1500, "REST APIs", 1500, "Java Services", 1500, "Microservices", 1500]}
                 wrapper="span"
                 speed={50}
                 repeat={Infinity}
@@ -205,9 +186,15 @@ const ModernHeroComponent = () => {
           </h1>
 
           {/* Description */}
-          <p className="text-base md:text-lg opacity-80 leading-relaxed max-w-lg">
-            Transforming complex requirements into elegant, high-performance backend solutions. Specializing in scalable
-            architectures, database optimization, and cloud-native applications.
+          <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl leading-relaxed">
+            I&apos;m a passionate backend developer who thrives on building high-performance, scalable applications that
+            power today&apos;s digital experiences. With expertise in Node.js, Python, and cloud technologies, I create
+            robust server-side solutions that handle millions of requests while maintaining exceptional performance.
+          </p>
+
+          <p className="text-lg text-gray-500 dark:text-gray-400 mb-12 max-w-xl">
+            From microservices architecture to API design, I don&apos;t just write code – I craft digital experiences
+            that scale.
           </p>
 
           {/* CTA buttons */}
@@ -236,14 +223,17 @@ const ModernHeroComponent = () => {
           {/* Feature cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-8">
             <FeatureCard
-              icon={<ServerIcon className="w-5 h-5" />}
-              title="API Development"
-              description="RESTful & GraphQL APIs built for performance and reliability"
+              icon={Code}
+              title="Clean Code"
+              description="Writing maintainable, scalable solutions"
+              delay={0.5}
             />
+            <FeatureCard icon={Zap} title="Performance" description="Optimized for speed and efficiency" delay={0.6} />
             <FeatureCard
-              icon={<CommandLineIcon className="w-5 h-5" />}
-              title="Microservices"
-              description="Scalable architectures with Docker & Kubernetes"
+              icon={Sparkles}
+              title="Innovation"
+              description="Always learning cutting-edge tech"
+              delay={0.7}
             />
           </div>
 
@@ -371,4 +361,5 @@ const ModernHeroComponent = () => {
   )
 }
 
-export default React.memo(ModernHeroComponent)
+const ModernHero = React.memo(ModernHeroComponent)
+export default ModernHero

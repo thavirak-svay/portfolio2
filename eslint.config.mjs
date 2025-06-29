@@ -13,10 +13,51 @@ const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
     rules: {
-      "@typescript-eslint/no-unused-vars": "off",
+      // TypeScript specific rules
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        { 
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_"
+        },
+      ],
+      "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/prefer-const": "error",
+      
+      // React specific rules
+      "react/prop-types": "off",
+      "react/react-in-jsx-scope": "off",
+      "react/display-name": "off",
+      "react/self-closing-comp": "error",
+      
+      // React Hooks
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
+      
+      // General JavaScript/TypeScript rules
+      "no-console": process.env.NODE_ENV === "production" ? "error" : "warn",
+      "no-debugger": process.env.NODE_ENV === "production" ? "error" : "warn",
+      "prefer-const": "error",
+      "no-var": "error",
+      "no-duplicate-imports": "error",
+      "no-unused-expressions": "error",
+      
+      // Import organization
+      "sort-imports": [
+        "error",
+        {
+          ignoreCase: true,
+          ignoreDeclarationSort: true,
+        },
+      ],
+    },
+  },
+  {
+    files: ["**/*.test.{js,jsx,ts,tsx}", "**/*.spec.{js,jsx,ts,tsx}"],
+    rules: {
       "@typescript-eslint/no-explicit-any": "off",
-      "react-hooks/exhaustive-deps": "off",
-      "prefer-const": "off",
+      "no-console": "off",
     },
   },
 ]

@@ -1,84 +1,208 @@
-# DevBackend Portfolio
+# Modern Portfolio Website
 
-A professional backend developer portfolio website built with Next.js, TypeScript, and Tailwind CSS. This portfolio showcases backend development skills, projects, and experience with a modern, responsive UI.
+A modern, performant, and fully-featured portfolio website built with Next.js 15, TypeScript, and Tailwind CSS.
 
-![DevBackend Portfolio](public/projects/portfolio-screenshot.jpg)
+## ✨ Features
 
-## Features
+- 🚀 **Next.js 15** - Latest features including App Router and Server Components
+- 🎯 **TypeScript** - Full type safety with strict configuration
+- 🎨 **Tailwind CSS** - Utility-first CSS framework for rapid development
+- 📱 **Responsive Design** - Mobile-first approach with modern UI/UX
+- ⚡ **Performance Optimized** - Image optimization, lazy loading, and bundle optimization
+- 🔧 **Modern Tooling** - ESLint, Prettier, and Husky for code quality
+- 🌙 **Dark/Light Mode** - Theme switching capability
+- 📊 **Analytics Ready** - Google Analytics and Vercel Analytics support
+- 🔒 **Security Headers** - Comprehensive security configuration
+- 📝 **SEO Optimized** - Meta tags, Open Graph, and structured data
 
-- 🌓 Dark/Light mode with system preference detection
-- 🎨 Modern, clean UI built with TailwindCSS
-- 🎭 Smooth animations and transitions using Framer Motion
-- 📱 Fully responsive design for all devices
-- ⚡ Built with Next.js for optimal performance
-- 🔠 Typing animations with react-type-animation
-- 🔍 Filterable project showcase
-- 📊 Animated skill progress bars
-- 📝 Contact form with validation
-- 🧩 Component-based architecture
+## 🏗️ Project Structure
 
-## Sections
+```
+src/
+├── app/                    # Next.js App Router
+│   ├── globals.css        # Global styles
+│   ├── layout.tsx         # Root layout
+│   ├── page.tsx          # Home page
+│   ├── loading.tsx       # Loading UI
+│   ├── error.tsx         # Error UI
+│   └── not-found.tsx     # 404 page
+├── components/            # React components
+│   ├── sections/         # Page sections
+│   ├── ui/              # Reusable UI components
+│   └── blocks/          # Complex component blocks
+├── lib/                  # Utility libraries
+├── hooks/               # Custom React hooks
+├── utils/               # Utility functions
+├── types/               # TypeScript type definitions
+├── constants/           # Application constants
+├── config/              # Configuration files
+├── styles/              # Additional styles
+└── assets/              # Static assets
+```
 
-- **Hero** - Engaging introduction with typing animation
-- **About** - Professional background and expertise
-- **Skills** - Visual representation of technical skills
-- **Projects** - Filterable gallery of backend projects
-- **Experience** - Timeline of professional experience
-- **Contact** - Contact form and direct contact options
-- **Footer** - Site navigation and additional links
+## 🚀 Getting Started
 
-## Tech Stack
+### Prerequisites
 
-- **Framework**: Next.js with App Router
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **Animation**: Framer Motion
-- **Icons**: Heroicons
-- **Deployment**: Vercel (recommended)
+- Node.js 18+ 
+- npm, yarn, or pnpm
 
-## Getting Started
+### Installation
 
 1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/yourusername/devbackend-portfolio.git
-   cd devbackend-portfolio
-   ```
+```bash
+git clone <repository-url>
+cd portfolio2
+```
 
 2. Install dependencies:
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+```
 
-   ```bash
-   npm install
-   ```
+3. Copy environment variables:
+```bash
+cp .env.example .env.local
+```
 
-3. Run the development server:
+4. Start the development server:
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+```
 
-   ```bash
-   npm run dev
-   ```
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📝 Available Scripts
 
-## Customization
+- `dev` - Start development server
+- `build` - Build for production
+- `start` - Start production server
+- `lint` - Run ESLint
+- `lint:fix` - Fix ESLint errors
+- `format` - Format code with Prettier
+- `format:check` - Check code formatting
+- `type-check` - Run TypeScript type checking
+- `clean` - Clean build artifacts
 
-1. **Personal Information**: Update text in components under `src/components/sections/`
-2. **Projects**: Modify the `projects` array in `src/components/sections/Projects.tsx`
-3. **Skills**: Update the `skillsData` array in `src/components/sections/Skills.tsx`
-4. **Experience**: Modify the `experienceData` array in `src/components/sections/Experience.tsx`
-5. **Colors & Theme**: Customize colors in `src/app/globals.css`
-6. **Images**: Replace images in the `public/projects/` directory
+## 🛠️ Configuration
 
-## Deployment
+### Environment Variables
 
-The easiest way to deploy your portfolio is to use [Vercel](https://vercel.com/new?utm_medium=default-template&filter=next.js), the platform from the creators of Next.js.
+See `.env.example` for all available environment variables. Key variables include:
 
-## License
+- `NEXT_PUBLIC_APP_URL` - Your application URL
+- `NEXT_PUBLIC_GA_ID` - Google Analytics ID
+- `NEXT_PUBLIC_VERCEL_ANALYTICS_ID` - Vercel Analytics ID
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+### Customization
 
-## Credits
+1. **Site Configuration**: Update `src/config/site.ts`
+2. **Constants**: Modify `src/constants/index.ts`
+3. **Styling**: Customize Tailwind config in `tailwind.config.ts`
+4. **Content**: Update sections in `src/components/sections/`
 
-- Icons from [Heroicons](https://heroicons.com/)
-- Animations by [Framer Motion](https://www.framer.com/motion/)
-- Typing animation by [React Type Animation](https://github.com/maxeth/react-type-animation)
-- Image placeholders from [Unsplash](https://unsplash.com/)
+## 🎨 Styling
+
+This project uses Tailwind CSS for styling with:
+
+- Custom color palette
+- Responsive design system
+- Dark/light mode support
+- Component-based architecture
+
+## 📱 Components
+
+### UI Components
+- **Buttons** - Various button variants
+- **Cards** - Content cards with different layouts
+- **Modals** - Accessible modal dialogs
+- **Forms** - Form components with validation
+
+### Sections
+- **Hero** - Landing section with CTA
+- **About** - Personal information and bio
+- **Skills** - Technical skills showcase
+- **Experience** - Work experience timeline
+- **Projects** - Portfolio projects grid
+- **Contact** - Contact form and information
+
+## 🔧 Development
+
+### Code Quality
+
+- **ESLint** - Linting with Next.js and TypeScript rules
+- **Prettier** - Code formatting
+- **TypeScript** - Strict type checking
+- **Husky** - Git hooks for pre-commit checks
+
+### Performance
+
+- Image optimization with Next.js Image component
+- Bundle optimization and code splitting
+- Lazy loading for better performance
+- SEO optimization with metadata API
+
+## 🚀 Deployment
+
+### Vercel (Recommended)
+
+1. Push your code to GitHub
+2. Connect your repository to Vercel
+3. Deploy automatically on push
+
+### Other Platforms
+
+The project can be deployed to any platform that supports Node.js:
+
+- Netlify
+- Railway
+- Docker
+- Traditional hosting
+
+## 📊 Analytics
+
+Configure analytics by setting the appropriate environment variables:
+
+- Google Analytics: `NEXT_PUBLIC_GA_ID`
+- Vercel Analytics: Built-in with Vercel deployment
+
+## 🔒 Security
+
+The project includes comprehensive security headers:
+
+- Content Security Policy
+- X-Frame-Options
+- X-Content-Type-Options
+- Referrer Policy
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Run tests and linting
+5. Submit a pull request
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## 🆘 Support
+
+If you need help or have questions:
+
+1. Check the [documentation](docs/)
+2. Create an [issue](issues/)
+3. Contact the maintainer
+
+---
+
+Built with ❤️ using Next.js, TypeScript, and Tailwind CSS.
