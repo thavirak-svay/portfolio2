@@ -1,43 +1,14 @@
 "use client"
 
-import React, { useState, useEffect, useMemo } from "react"
-import { motion } from "framer-motion"
-import {
-  AcademicCapIcon,
-  CpuChipIcon,
-  GlobeAltIcon,
-  BeakerIcon,
-  BuildingOfficeIcon,
-  CommandLineIcon,
-  DocumentTextIcon,
-  PaintBrushIcon,
-  ShieldCheckIcon,
-  WrenchScrewdriverIcon,
-  CubeIcon,
-  CloudIcon,
-  DevicePhoneMobileIcon,
-  ServerIcon,
-  ComputerDesktopIcon,
-  CircleStackIcon,
-  CodeBracketIcon,
-} from "@heroicons/react/24/outline"
-import {
-  Brain,
-  Database,
-  GitBranch,
-  MessageSquare,
-  CheckCircle,
-  TrendingUp,
-  Code2,
-  Palette,
-  Globe,
-  Workflow,
-  TestTube,
-  Shield,
-} from "lucide-react"
-import { GlowingEffect } from "@/components/ui/GlowingEffect"
 import DotPattern from "@/components/ui/DotPattern1"
-import { cn } from "@/lib/utils"
+import { GlowingEffect } from "@/components/ui/GlowingEffect"
+import {
+    CubeIcon,
+    ServerIcon
+} from "@heroicons/react/24/outline"
+import { motion } from "framer-motion"
+import React, { useState } from "react"
+import Glass from "../ui/Glass"
 
 // Define backendSkills and additionalSkills arrays outside the component
 const backendSkillsData = [
@@ -163,7 +134,7 @@ const SkillCardComponent = ({
         />
 
         {/* Inner content container with dot pattern */}
-        <div className="relative flex h-full flex-col justify-between overflow-hidden rounded-xl border-[0.75px] border-white/10 bg-white/5 backdrop-blur-sm p-6">
+        <Glass className="relative flex h-full flex-col justify-between overflow-hidden rounded-xl p-6">
           {/* Skill header with icon */}
           <div className="flex items-start justify-between mb-4 relative z-10">
             <div className={`p-3 rounded-lg bg-white/5 transition-colors duration-300 ${classes.icon}`}>{icon}</div>
@@ -189,7 +160,7 @@ const SkillCardComponent = ({
 
           {/* Description */}
           <p className="text-sm leading-relaxed opacity-70 relative z-10">{description}</p>
-        </div>
+        </Glass>
       </div>
     </motion.div>
   )
@@ -199,9 +170,9 @@ const SkillCard = React.memo(SkillCardComponent)
 // Skill tag component for additional technologies
 const SkillTagComponent = ({ label }: { label: string; icon?: React.ReactNode }) => {
   return (
-    <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-white/10 bg-white/5 backdrop-blur-sm">
+    <Glass className="flex items-center gap-2 px-3 py-1.5 rounded-lg">
       <span className="text-sm">{label}</span>
-    </div>
+    </Glass>
   )
 }
 const SkillTag = React.memo(SkillTagComponent)
@@ -241,11 +212,11 @@ const StatCardComponent = ({
           borderWidth={isProjectsCard ? 4 : 3}
           variant="lightgray"
         />
-        <div className="relative flex h-full flex-col justify-between overflow-hidden rounded-xl border-[0.75px] border-white/10 bg-white/5 backdrop-blur-sm p-6">
+        <Glass className="relative flex h-full flex-col justify-between overflow-hidden rounded-xl p-6">
           <div className={`text-3xl font-bold ${colorClass} mb-2 relative z-10`}>{number}</div>
           <h3 className="text-lg font-semibold mb-1 relative z-10">{title}</h3>
           <p className="text-sm opacity-70 relative z-10">{description}</p>
-        </div>
+        </Glass>
       </div>
     </motion.div>
   )
@@ -279,9 +250,9 @@ const ModernSkillsComponent = () => {
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
         >
-          <div className="inline-block px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-4">
+          <Glass className="inline-block px-3 py-1 rounded-full mb-4">
             <span className="text-primary text-sm font-medium">Expert Backend Skills</span>
-          </div>
+          </Glass>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">Technical Expertise</h2>
           <p className="max-w-2xl mx-auto opacity-70">
             With extensive experience across multiple backend technologies, I build robust, scalable systems that handle
@@ -329,8 +300,9 @@ const ModernSkillsComponent = () => {
         </div>
 
         {/* Additional skills section */}
-        <motion.div
-          className="mt-6 p-6 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm relative"
+        <Glass
+          as={motion.div}
+          className="mt-6 p-6 rounded-xl relative"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -352,7 +324,7 @@ const ModernSkillsComponent = () => {
               </motion.div>
             ))}
           </div>
-        </motion.div>
+        </Glass>
       </div>
     </section>
   )

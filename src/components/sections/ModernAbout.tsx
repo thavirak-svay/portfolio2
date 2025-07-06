@@ -1,10 +1,9 @@
 "use client"
 
-import GlassEffect from "@/components/ui/GlassEffect"
-import { useTheme } from "@/components/ui/ThemeProvider"
+import { MotionGlass } from "@/components/ui/Glass"
 import { motion } from "framer-motion"
 import Image from "next/image"
-import React, { useRef, useState } from "react"
+import React, { useRef } from "react"
 
 interface Card3DProps {
   title: string
@@ -12,32 +11,26 @@ interface Card3DProps {
 }
 
 const Card3DComponent: React.FC<Card3DProps> = ({ title, description }) => {
-  const [isHovered, setIsHovered] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)
-  const { theme } = useTheme()
 
   return (
-    <motion.div
+    <MotionGlass
       ref={cardRef}
-      className="group relative h-full cursor-pointer"
+      className="group relative h-full cursor-pointer p-6"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
       viewport={{ once: true }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
       whileHover={{ y: -5 }}
     >
-      <GlassEffect className="h-full p-6">
-        {/* Content - centered */}
-        <div className="text-center h-full flex flex-col justify-center">
-          <h3 className="text-lg font-bold mb-3 text-gray-900 dark:text-white group-hover:text-primary transition-colors duration-300">
-            {title}
-          </h3>
-          <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed opacity-70">{description}</p>
-        </div>
-      </GlassEffect>
-    </motion.div>
+      {/* Content - centered */}
+      <div className="text-center h-full flex flex-col justify-center">
+        <h3 className="text-lg font-bold mb-3 text-white group-hover:text-primary transition-colors duration-300">
+          {title}
+        </h3>
+        <p className="text-sm text-gray-400 leading-relaxed opacity-70">{description}</p>
+      </div>
+    </MotionGlass>
   )
 }
 
@@ -45,22 +38,19 @@ const Card3D = React.memo(Card3DComponent)
 
 // Enhanced Stats Card Component
 const StatsCard = ({ title, value, description }: { title: string; value: string; description: string }) => {
-  const { theme } = useTheme()
-
   return (
-    <motion.div
+    <MotionGlass
+      className="p-6 text-center h-full"
       initial={{ opacity: 0, scale: 0.8 }}
       whileInView={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5 }}
       viewport={{ once: true }}
       whileHover={{ y: -5 }}
     >
-      <GlassEffect className="p-6 text-center h-full">
-        <h4 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">{title}</h4>
-        <div className="text-3xl font-bold mb-2 text-blue-600 dark:text-blue-400">{value}</div>
-        <p className="text-sm text-gray-600 dark:text-gray-300">{description}</p>
-      </GlassEffect>
-    </motion.div>
+      <h4 className="text-lg font-semibold mb-2 text-white">{title}</h4>
+      <div className="text-3xl font-bold mb-2 text-primary">{value}</div>
+      <p className="text-sm text-gray-400">{description}</p>
+    </MotionGlass>
   )
 }
 
@@ -75,13 +65,13 @@ const SimpleCard: React.FC<Card3DProps> = ({ title, description }) => {
       viewport={{ once: true }}
       whileHover={{ y: -5 }}
     >
-      <div className="h-full p-6 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition-all duration-300">
+      <div className="h-full p-6 rounded-xl border border-gray-700 bg-gray-800 shadow-sm hover:shadow-md transition-all duration-300">
         {/* Content - centered */}
         <div className="text-center h-full flex flex-col justify-center">
-          <h3 className="text-lg font-bold mb-3 text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
+          <h3 className="text-lg font-bold mb-3 text-white group-hover:text-blue-400 transition-colors duration-300">
             {title}
           </h3>
-          <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">{description}</p>
+          <p className="text-sm text-gray-400 leading-relaxed">{description}</p>
         </div>
       </div>
     </motion.div>
@@ -90,7 +80,6 @@ const SimpleCard: React.FC<Card3DProps> = ({ title, description }) => {
 
 const ModernAboutComponent = () => {
   const containerRef = useRef<HTMLDivElement>(null)
-  const { theme } = useTheme()
 
   return (
     <section ref={containerRef} id="about" className="relative py-20 bg-gray-50 dark:bg-gray-900 overflow-hidden">
@@ -125,7 +114,7 @@ const ModernAboutComponent = () => {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <GlassEffect className="overflow-hidden">
+            <MotionGlass>
               <motion.div className="w-full">
                 <Image
                   src="/projects/database.jpg"
@@ -139,8 +128,8 @@ const ModernAboutComponent = () => {
 
               {/* Enhanced code overlay */}
               <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
-                <GlassEffect className="p-4">
-                  <pre className="text-xs text-gray-700 dark:text-gray-300 font-mono">
+                <MotionGlass className="p-4">
+                  <pre className="text-xs text-gray-300 font-mono">
                     <code>
                       {`// Backend architecture
 const createServer = async () => {
@@ -155,9 +144,9 @@ const createServer = async () => {
 }`}
                     </code>
                   </pre>
-                </GlassEffect>
+                </MotionGlass>
               </div>
-            </GlassEffect>
+            </MotionGlass>
           </motion.div>
 
           {/* Text content */}

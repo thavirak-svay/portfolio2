@@ -1,6 +1,6 @@
 "use client"
 
-import GlassEffect from "@/components/ui/GlassEffect"
+import Glass from "@/components/ui/Glass"
 import { useTheme } from "@/components/ui/ThemeProvider"
 import { ArrowDownIcon, CodeBracketIcon } from "@heroicons/react/24/outline"
 import { motion } from "framer-motion"
@@ -45,7 +45,7 @@ const FeatureCard = ({
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay }}>
-      <GlassEffect className="p-6 group transition-all duration-300">
+      <Glass className="p-6 group transition-all duration-300 h-full">
         <div className="flex items-center gap-3 mb-3">
           <div className="p-2 rounded-lg bg-gradient-to-br from-blue-500/20 to-purple-500/20 group-hover:from-blue-500/30 group-hover:to-purple-500/30 transition-all duration-300">
             <Icon className="w-5 h-5 text-blue-600 dark:text-blue-400" />
@@ -53,7 +53,7 @@ const FeatureCard = ({
           <h3 className="font-semibold text-gray-900 dark:text-white">{title}</h3>
         </div>
         <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">{description}</p>
-      </GlassEffect>
+      </Glass>
     </motion.div>
   )
 }
@@ -81,7 +81,7 @@ const CodeBlock3D = () => {
         className="relative transform-gpu transition-transform duration-300 hover:rotateX-5 hover:rotateY-5"
         style={{ transformStyle: "preserve-3d" }}
       >
-        <GlassEffect className="p-6 font-mono text-sm overflow-hidden">
+        <Glass className="p-6 font-mono text-sm overflow-hidden">
           <div className="flex items-center gap-2 mb-4">
             <div className="flex gap-1.5">
               <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
@@ -116,7 +116,7 @@ const CodeBlock3D = () => {
             animate={{ opacity: [1, 0, 1] }}
             transition={{ duration: 1, repeat: Infinity }}
           />
-        </GlassEffect>
+        </Glass>
 
         {/* 3D shadow effect */}
         <div
@@ -209,15 +209,16 @@ const ModernHeroComponent = () => {
               <ArrowDownIcon className="w-4 h-4" />
             </motion.a>
 
-            <motion.a
+            <Glass
+              as={motion.a}
               href="#contact"
-              whileHover={{ scale: 1.03, backgroundColor: "rgba(255,255,255,0.08)" }}
+              whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              className="px-8 py-4 border border-white/10 rounded-xl flex items-center justify-center gap-2 backdrop-blur-sm"
+              className="px-8 py-4 rounded-xl flex items-center justify-center gap-2"
             >
               Get In Touch
               <CodeBracketIcon className="w-4 h-4" />
-            </motion.a>
+            </Glass>
           </div>
 
           {/* Feature cards */}
@@ -242,16 +243,17 @@ const ModernHeroComponent = () => {
             <p className="text-xs uppercase tracking-wider opacity-60 mb-2">Tech Stack</p>
             <div className="flex flex-wrap gap-2">
               {techStack.map((tech, index) => (
-                <motion.span
+                <Glass
+                  as={motion.span}
                   key={index}
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.4 + index * 0.1, duration: 0.3 }}
                   whileHover={{ y: -2, scale: 1.05 }}
-                  className="text-xs px-3 py-1.5 rounded-md border border-white/10 bg-white/5 backdrop-blur-sm"
+                  className="text-xs px-3 py-1.5 rounded-md"
                 >
                   {tech}
-                </motion.span>
+                </Glass>
               ))}
             </div>
           </div>

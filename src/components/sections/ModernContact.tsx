@@ -1,26 +1,11 @@
 "use client"
 
-import GlassEffect from "@/components/ui/GlassEffect"
-import { useTheme } from "@/components/ui/ThemeProvider"
+import { MotionGlass } from "@/components/ui/Glass"
 import { cn } from "@/lib/utils"
 import { EnvelopeIcon, MapPinIcon, PhoneIcon } from "@heroicons/react/24/outline"
 import { motion } from "framer-motion"
 import { CheckCircle, Send } from "lucide-react"
 import React, { FormEvent, useState } from "react"
-
-const GlassButton: React.FC<{ children: React.ReactNode; href?: string }> = ({ children, href }) => (
-  <GlassEffect
-    href={href}
-    className="rounded-3xl px-10 py-6 hover:px-11 hover:py-7 hover:rounded-4xl overflow-hidden"
-  >
-    <div
-      className="transition-all duration-700 hover:scale-95"
-      style={{ transitionTimingFunction: "cubic-bezier(0.175, 0.885, 0.32, 2.2)" }}
-    >
-      {children}
-    </div>
-  </GlassEffect>
-)
 
 const ModernContactComponent = () => {
   const [formData, setFormData] = useState({
@@ -33,7 +18,6 @@ const ModernContactComponent = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [formErrors, setFormErrors] = useState<Record<string, string>>({})
-  const { theme } = useTheme()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -135,38 +119,40 @@ const ModernContactComponent = () => {
             <div className="space-y-6">
               {/* Email Card */}
               <a href="mailto:your.email@example.com" className="block group transition-all duration-300">
-                <GlassEffect className="p-6 group transition-all duration-300 h-full">
+                <MotionGlass
+                  className="p-6 group transition-all duration-300 h-full"
+                  whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                >
                   <div className="flex items-center gap-4 mb-4">
                     <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 group-hover:from-blue-500/30 group-hover:to-purple-500/30 transition-all duration-300">
-                      <EnvelopeIcon className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                      <EnvelopeIcon className="w-6 h-6 text-blue-400" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900 dark:text-white">Email</h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-300">Drop me a line anytime!</p>
+                      <h3 className="font-semibold text-white">Email</h3>
+                      <p className="text-sm text-gray-300">Drop me a line anytime!</p>
                     </div>
                   </div>
-                  <p className="text-gray-800 dark:text-gray-200 font-medium group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                    your.email@example.com
-                  </p>
-                </GlassEffect>
+                  <p className="font-medium text-blue-400 transition-colors">your.email@example.com</p>
+                </MotionGlass>
               </a>
 
               {/* Phone Card */}
               <a href="tel:+1234567890" className="block group transition-all duration-300">
-                <GlassEffect className="p-6 group transition-all duration-300 h-full">
+                <MotionGlass
+                  className="p-6 group transition-all duration-300 h-full"
+                  whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                >
                   <div className="flex items-center gap-4 mb-4">
                     <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 group-hover:from-blue-500/30 group-hover:to-purple-500/30 transition-all duration-300">
-                      <PhoneIcon className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                      <PhoneIcon className="w-6 h-6 text-blue-400" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900 dark:text-white">Phone</h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-300">Available during business hours</p>
+                      <h3 className="font-semibold text-white">Phone</h3>
+                      <p className="text-sm text-gray-300">Available during business hours</p>
                     </div>
                   </div>
-                  <p className="text-gray-800 dark:text-gray-200 font-medium group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                    +1 (234) 567-890
-                  </p>
-                </GlassEffect>
+                  <p className="font-medium text-blue-400 transition-colors">+1 (234) 567-890</p>
+                </MotionGlass>
               </a>
 
               {/* Location Card */}
@@ -176,20 +162,21 @@ const ModernContactComponent = () => {
                 rel="noopener noreferrer"
                 className="block group transition-all duration-300"
               >
-                <GlassEffect className="p-6 group transition-all duration-300 h-full">
+                <MotionGlass
+                  className="p-6 group transition-all duration-300 h-full"
+                  whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                >
                   <div className="flex items-center gap-4 mb-4">
                     <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 group-hover:from-blue-500/30 group-hover:to-purple-500/30 transition-all duration-300">
-                      <MapPinIcon className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                      <MapPinIcon className="w-6 h-6 text-blue-400" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900 dark:text-white">Location</h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-300">Based in</p>
+                      <h3 className="font-semibold text-white">Location</h3>
+                      <p className="text-sm text-gray-300">Based in</p>
                     </div>
                   </div>
-                  <p className="text-gray-800 dark:text-gray-200 font-medium group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                    Your City, Country
-                  </p>
-                </GlassEffect>
+                  <p className="font-medium text-blue-400 transition-colors">Your City, Country</p>
+                </MotionGlass>
               </a>
             </div>
 
@@ -213,13 +200,13 @@ const ModernContactComponent = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
             viewport={{ once: true }}
           >
-            <GlassEffect className="p-8">
-              <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-6">Send a Message</h3>
+            <MotionGlass className="p-8">
+              <h3 className="text-2xl font-semibold text-white mb-6">Send a Message</h3>
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
                       Name *
                     </label>
                     <input
@@ -229,13 +216,17 @@ const ModernContactComponent = () => {
                       value={formData.name}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-3xl bg-white/20 focus:bg-white/30 transition-all duration-300"
+                      className={cn(
+                        "w-full px-4 py-3 text-white placeholder-gray-400 bg-black/20 rounded-lg border border-white/10 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-300",
+                        formErrors.name ? "border-red-500" : "border-white/10"
+                      )}
                       placeholder="Your full name"
                     />
+                    {formErrors.name && <p className="text-red-500 text-xs mt-1">{formErrors.name}</p>}
                   </div>
 
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
                       Email *
                     </label>
                     <input
@@ -245,14 +236,18 @@ const ModernContactComponent = () => {
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-3xl bg-white/20 focus:bg-white/30 transition-all duration-300"
+                      className={cn(
+                        "w-full px-4 py-3 text-white placeholder-gray-400 bg-black/20 rounded-lg border border-white/10 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-300",
+                        formErrors.email ? "border-red-500" : "border-white/10"
+                      )}
                       placeholder="your.email@example.com"
                     />
+                    {formErrors.email && <p className="text-red-500 text-xs mt-1">{formErrors.email}</p>}
                   </div>
                 </div>
 
                 <div>
-                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label htmlFor="subject" className="block text-sm font-medium text-gray-300 mb-2">
                     Subject *
                   </label>
                   <input
@@ -262,13 +257,17 @@ const ModernContactComponent = () => {
                     value={formData.subject}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-3xl bg-white/20 focus:bg-white/30 transition-all duration-300"
+                    className={cn(
+                      "w-full px-4 py-3 text-white placeholder-gray-400 bg-black/20 rounded-lg border border-white/10 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-300",
+                      formErrors.subject ? "border-red-500" : "border-white/10"
+                    )}
                     placeholder="What's this about?"
                   />
+                  {formErrors.subject && <p className="text-red-500 text-xs mt-1">{formErrors.subject}</p>}
                 </div>
 
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-2">
                     Message *
                   </label>
                   <textarea
@@ -276,53 +275,49 @@ const ModernContactComponent = () => {
                     name="message"
                     value={formData.message}
                     onChange={handleChange}
-                    required
                     rows={5}
-                    className="w-full px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-3xl bg-white/20 focus:bg-white/30 transition-all duration-300 resize-none"
-                    placeholder="Tell me about your project or what you'd like to discuss..."
+                    required
+                    className={cn(
+                      "w-full px-4 py-3 text-white placeholder-gray-400 bg-black/20 rounded-lg border border-white/10 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-300",
+                      formErrors.message ? "border-red-500" : "border-white/10"
+                    )}
+                    placeholder="Your detailed message..."
                   />
+                  {formErrors.message && <p className="text-red-500 text-xs mt-1">{formErrors.message}</p>}
                 </div>
 
-                <motion.button
-                  type="submit"
-                  disabled={isSubmitting}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className={cn(
-                    "w-full text-white font-semibold rounded-xl transition-all duration-200",
-                    "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700",
-                    "disabled:opacity-50 disabled:cursor-not-allowed",
-                    isSubmitting && "animate-pulse"
-                  )}
-                >
-                  {isSubmitting ? (
-                    <div className="flex items-center justify-center gap-2">
-                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      Sending...
-                    </div>
-                  ) : (
-                    <div className="flex items-center justify-center gap-2">
-                      <Send className="w-5 h-5" />
-                      Send Message
-                    </div>
-                  )}
-                </motion.button>
+                <div>
+                  <motion.button
+                    type="submit"
+                    disabled={isSubmitting || isSubmitted}
+                    className="w-full font-semibold py-3 px-6 rounded-lg text-white bg-blue-600 hover:bg-blue-700 disabled:bg-gray-500 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all duration-300"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <motion.div
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                          className="w-5 h-5 border-t-2 border-b-2 border-white rounded-full"
+                        />
+                        <span>Sending...</span>
+                      </>
+                    ) : isSubmitted ? (
+                      <>
+                        <CheckCircle className="w-5 h-5" />
+                        <span>Message Sent!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-5 h-5" />
+                        <span>Send Message</span>
+                      </>
+                    )}
+                  </motion.button>
+                </div>
               </form>
-
-              {/* Submit Status */}
-              {isSubmitted && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-4 p-4 rounded-lg bg-green-500/10 border border-green-500/20 text-green-600 dark:text-green-400"
-                >
-                  <div className="flex items-center gap-2">
-                    <CheckCircle className="w-5 h-5" />
-                    Thank you! Your message has been sent successfully.
-                  </div>
-                </motion.div>
-              )}
-            </GlassEffect>
+            </MotionGlass>
           </motion.div>
         </div>
       </div>

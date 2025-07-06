@@ -1,8 +1,9 @@
 "use client"
 
-import React from "react"
-import { motion } from "framer-motion"
 import { CommandLineIcon } from "@heroicons/react/24/solid"
+import { motion } from "framer-motion"
+import React from "react"
+import Glass from "./Glass"
 
 // Navigation links - defined outside
 const footerNavLinks = [
@@ -53,7 +54,10 @@ const ModernFooterComponent = () => {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="bg-gradient-to-b from-transparent to-black/30 backdrop-blur-md pt-16 pb-8 border-t border-white/10 relative">
+    <Glass
+      as="footer"
+      className="pt-16 pb-8 border-t border-x-0 border-b-0 relative"
+    >
       {/* Background elements */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
       <div className="absolute bottom-0 left-1/4 w-96 h-96 rounded-full bg-primary/5 filter blur-3xl -z-10"></div>
@@ -176,7 +180,7 @@ const ModernFooterComponent = () => {
           </motion.div>
         </div>
       </div>
-    </footer>
+    </Glass>
   )
 }
 

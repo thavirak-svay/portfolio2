@@ -1,12 +1,12 @@
 "use client"
 
-import React, { useState, useEffect, useCallback } from "react"
-import { motion } from "framer-motion"
-import Link from "next/link"
-import { cn } from "@/lib/utils"
-import { Home, User, FolderOpen, Award, Mail } from "lucide-react"
-import GlassPanel from "@/components/ui/GlassPanel"
 import { useTheme } from "@/components/ui/ThemeProvider"
+import { cn } from "@/lib/utils"
+import { motion } from "framer-motion"
+import { Award, FolderOpen, Home, Mail, User } from "lucide-react"
+import Link from "next/link"
+import React, { useCallback, useEffect, useState } from "react"
+import Glass from "./Glass"
 
 // Debounce utility function
 function debounce<F extends (...args: any[]) => any>(func: F, waitFor: number) {
@@ -160,11 +160,9 @@ const MinimalNavbarComponent = () => {
         }}
       >
         <div className="mx-auto flex justify-center px-4">
-          <GlassPanel
-            variant={isMobile ? "strong" : "panel"}
-            darkMode={theme === "dark"}
+          <Glass
             className={cn(
-              "flex items-center backdrop-blur-xl border border-white/20 dark:border-white/10",
+              "flex items-center",
               isMobile
                 ? "justify-evenly gap-2 rounded-full w-auto px-4 py-3 shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
                 : "gap-8 rounded-full px-8 py-2 shadow-[0_4px_24px_rgba(0,0,0,0.2)]"
@@ -217,11 +215,7 @@ const MinimalNavbarComponent = () => {
                       transition={{ type: "spring", stiffness: 350, damping: 30 }}
                     >
                       {isMobile && (
-                        <GlassPanel
-                          variant="panel"
-                          darkMode={theme === "dark"}
-                          className="h-full w-full rounded-full backdrop-blur-lg bg-gradient-to-r from-primary/20 to-accent/20"
-                        />
+                        <div className="h-full w-full rounded-full backdrop-blur-lg bg-gradient-to-r from-primary/20 to-accent/20" />
                       )}
                     </motion.div>
                   )}
@@ -241,7 +235,7 @@ const MinimalNavbarComponent = () => {
                 </Link>
               )
             })}
-          </GlassPanel>
+          </Glass>
         </div>
       </motion.nav>
     </div>

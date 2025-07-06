@@ -1,10 +1,11 @@
 "use client"
 
-import React, { useState } from "react"
-import { motion } from "framer-motion"
-import { BuildingOfficeIcon } from "@heroicons/react/24/outline"
-import Background from "../ui/Background"
 import { GlowingEffect } from "@/components/ui/GlowingEffect"
+import { BuildingOfficeIcon } from "@heroicons/react/24/outline"
+import { motion } from "framer-motion"
+import React, { useState } from "react"
+import Background from "../ui/Background"
+import Glass from "../ui/Glass"
 
 // Define gradient colors and stops outside the component
 const experienceGradientColors = [
@@ -136,7 +137,7 @@ const ExperienceCard = ({ experience }: { experience: Experience }) => {
         />
 
         {/* Inner content container */}
-        <div className="relative flex h-full flex-col overflow-hidden rounded-xl border-[0.75px] border-white/10 bg-white/5 backdrop-blur-sm p-6">
+        <Glass className="relative flex h-full flex-col overflow-hidden rounded-xl p-6">
           {/* Header section */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-3 relative z-10">
             <div>
@@ -178,7 +179,7 @@ const ExperienceCard = ({ experience }: { experience: Experience }) => {
               ))}
             </div>
           </div>
-        </div>
+        </Glass>
       </div>
     </motion.div>
   )
@@ -213,9 +214,9 @@ const ModernExperienceComponent = () => {
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
         >
-          <div className="inline-block px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-4">
+          <Glass className="inline-block px-3 py-1 rounded-full mb-4">
             <span className="text-primary text-sm font-medium">Professional Journey</span>
-          </div>
+          </Glass>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">Work Experience</h2>
           <p className="max-w-2xl mx-auto opacity-70">
             My professional journey as a backend developer, architecting scalable systems and leading high-performance
